@@ -4,7 +4,10 @@ import 'package:tridivya_spritual_wellness_app/screens/splash_screen.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
- runApp(MaterialApp(
-  home: SplashScreen(),
-));
+  runApp(
+    const MaterialApp(
+      home: SplashScreen(),
+      debugShowCheckedModeBanner: false,
+    ),
+  );
 }

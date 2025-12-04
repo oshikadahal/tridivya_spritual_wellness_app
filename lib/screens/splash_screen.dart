@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'first_onboarding_screen.dart'; // Make sure this path is correct
+import 'package:tridivya_spritual_wellness_app/screens/first_onboarding_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});

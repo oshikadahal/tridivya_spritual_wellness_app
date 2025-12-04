@@ -27,7 +27,7 @@ class FirstOnboardingScreen extends StatelessWidget {
 
               // Logo Icon
               Image.asset(
-                "assets/images/logo.png",
+                "assets/images/onboarding.png",
                 height: 150,
                 width: 150,
               ),
