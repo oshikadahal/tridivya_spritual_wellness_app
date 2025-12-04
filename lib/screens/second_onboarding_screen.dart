@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'third_onboarding_screen.dart';
+import 'package:tridivya_spritual_wellness_app/screens/third_onboarding_screen.dart';
 
 class SecondOnboardingScreen extends StatelessWidget {
   const SecondOnboardingScreen({super.key});
@@ -7,67 +7,104 @@ class SecondOnboardingScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
-      body: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
+      body: Container(
+        width: double.infinity,
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            colors: [
+              Color(0xFFFCE1F8), // top light pink
+              Color(0xFFD1E8F2), // bottom light blue
+            ],
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+          ),
+        ),
+        child: SafeArea(
+          child: Column(
+            children: [
+              const SizedBox(height: 70),
 
-            Image.asset(
-              "assets/images/onboard2.png",
-              height: 280,
-            ),
-
-            const SizedBox(height: 30),
-
-            const Text(
-              "Meditation Made Easy",
-              style: TextStyle(
-                fontSize: 28,
-                fontWeight: FontWeight.bold,
-                color: Color(0xFF0C7272),
+              // Logo or image for second screen
+              Image.asset(
+                "assets/images/second_image.png", // change your image here
+                height: 150,
+                width: 150,
               ),
-              textAlign: TextAlign.center,
-            ),
 
-            const SizedBox(height: 15),
+              const SizedBox(height: 20),
 
-            const Text(
-              "Calm your mind with simple guided\n"
-              "meditation sessions.",
-              style: TextStyle(
-                fontSize: 16,
-                color: Colors.black54,
+              // Title
+              const Text(
+                "Tridivya Wellness",
+                style: TextStyle(
+                  fontSize: 32,
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xFF5A4DB7),
+                ),
               ),
-              textAlign: TextAlign.center,
-            ),
 
-            const SizedBox(height: 40),
+              const SizedBox(height: 10),
 
-            ElevatedButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const ThirdOnboardingScreen(),
+              // Small title description
+              const Text(
+                "Enhance your mind and soul",
+                style: TextStyle(
+                  fontSize: 16,
+                  color: Colors.black87,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+
+              const SizedBox(height: 20),
+
+              // Paragraph text
+              const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 40),
+                child: Text(
+                  "Explore meditation exercises and mindful practices to rejuvenate your inner self",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: Colors.black54,
+                    height: 1.4,
                   ),
-                );
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFF0C7272),
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 60, vertical: 14),
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(25)),
+                ),
               ),
-              child: const Text(
-                "Next",
-                style: TextStyle(fontSize: 18, color: Colors.white),
-              ),
-            ),
 
-          ],
+              const Spacer(),
+
+              // Next Button
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 40),
+                child: SizedBox(
+                  width: double.infinity,
+                  height: 50,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFFCCAFFF),
+                      foregroundColor: Colors.white,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (_) => const ThirdOnboardingScreen()),
+                      );
+                    },
+                    child: const Text(
+                      "Next",
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

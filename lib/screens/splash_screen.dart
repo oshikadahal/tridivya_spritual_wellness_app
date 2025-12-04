@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'first_onboarding_screen.dart'; // Make sure this path is correct
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -8,6 +9,20 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
+  @override
+  void initState() {
+    super.initState();
+    // Navigate to FirstOnboardingScreen after 2 seconds
+    Future.delayed(const Duration(seconds: 2), () {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const FirstOnboardingScreen(),
+        ),
+      );
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -26,7 +41,6 @@ class _SplashScreenState extends State<SplashScreen> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              
               // App Logo
               Image.asset(
                 'assets/images/logo.png',
@@ -45,7 +59,6 @@ class _SplashScreenState extends State<SplashScreen> {
                   color: Colors.white,
                 ),
               ),
-
               const SizedBox(height: 8),
 
               // Subtitle
@@ -56,7 +69,6 @@ class _SplashScreenState extends State<SplashScreen> {
                   color: Colors.white,
                 ),
               ),
-
             ],
           ),
         ),

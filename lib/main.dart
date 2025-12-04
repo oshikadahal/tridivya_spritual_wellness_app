@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
-import 'app.dart';
+import 'package:tridivya_spritual_wellness_app/screens/splash_screen.dart';
+
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  runApp(const App());
+ runApp(MaterialApp(
+  home: SplashScreen(),
+));
 }
