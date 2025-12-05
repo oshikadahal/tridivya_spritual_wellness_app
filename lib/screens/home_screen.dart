@@ -106,7 +106,7 @@ class HomePage extends StatelessWidget {
                       context: context,
                       title: "Deep Breathing",
                       duration: "8 min",
-                      thumbnail: "assets/thumbnails/thumbnail1.jpg",
+                      thumbnail: "assets/thumbnails/mantrachanting.jpg",
                       videoUrl: "assets/videos/meditation1.mp4",
                     ),
                   ],
