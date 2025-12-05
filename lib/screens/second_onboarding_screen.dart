@@ -27,11 +27,11 @@ class SecondOnboardingScreen extends StatelessWidget {
               // Logo or image for second screen
               Image.asset(
                 "assets/images/onboarding2.png", // change your image here
-                height: 150,
-                width: 150,
+                height: 250,
+                width: 250,
               ),
 
-              const SizedBox(height: 20),
+              const SizedBox(height: 50),
 
               // Title
               const Text(
