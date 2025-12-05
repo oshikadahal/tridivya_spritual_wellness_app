@@ -92,14 +92,14 @@ class HomePage extends StatelessWidget {
                       context: context,
                       title: "Yoga for Beginners",
                       duration: "10 min",
-                      thumbnail: "assets/thumbnails/thumbnail1.jpg",
+                      thumbnail: "assets/thumbnails/yogathumbnail.jpg",
                       videoUrl: "assets/videos/meditation1.mp4",
                     ),
                     sessionCard(
                       context: context,
                       title: "Mindful Meditation",
                       duration: "12 min",
-                      thumbnail: "assets/thumbnails/thumbnail1.jpg",
+                      thumbnail: "assets/thumbnails/breathing1.webp",
                       videoUrl: "assets/videos/meditation1.mp4",
                     ),
                     sessionCard(
