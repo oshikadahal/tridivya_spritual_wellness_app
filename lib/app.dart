@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:tridivya_spritual_wellness_app/screens/first_onboarding_screen.dart';
+import 'package:tridivya_spritual_wellness_app/screens/home_screen.dart';
 import 'package:tridivya_spritual_wellness_app/screens/login_screen.dart';
 import 'package:tridivya_spritual_wellness_app/screens/second_onboarding_screen.dart';
 import 'package:tridivya_spritual_wellness_app/screens/signup_screen.dart';
 import 'package:tridivya_spritual_wellness_app/screens/splash_screen.dart';
 
 
-// import 'screens/home/home_screen.dart';
+
 
 class App extends StatelessWidget {
   const App({super.key});
@@ -42,7 +43,7 @@ class App extends StatelessWidget {
          '/onboarding2': (context) => const SecondOnboardingScreen(),
          '/login': (context) => const LoginScreen(),
          '/register': (context) => const SignupScreen(),
-        // '/home': (context) => const HomeScreen(),
+         '/home': (context) =>  HomePage(),
       },
     );
   }
