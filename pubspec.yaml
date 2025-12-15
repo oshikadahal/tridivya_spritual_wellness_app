@@ -65,6 +65,19 @@ flutter:
     - assets/images/
     - assets/videos/
     - assets/thumbnails/
+
+  fonts:
+     - family: OpenSans Bold
+       fonts:
+         - asset: assets/fonts/OpenSans-Bold.ttf
+
+     - family: OpenSans Regular
+       fonts:
+         - asset: assets/fonts/OpenSans-Regular.ttf
+
+     - family: OpenSans Italic
+       fonts:
+         - asset: assets/fonts/OpenSans-Italic.ttf
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
 
