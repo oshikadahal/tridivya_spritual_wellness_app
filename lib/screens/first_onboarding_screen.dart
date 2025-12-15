@@ -13,8 +13,8 @@ class FirstOnboardingScreen extends StatelessWidget {
         decoration: const BoxDecoration(
           gradient: LinearGradient(
             colors: [
-              Color(0xFFE0F2F9), // top light blue
-              Color(0xFFDCC5F5), // bottom light purple
+              Color(0xFFE0F2F9), 
+              Color(0xFFDCC5F5), 
             ],
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
@@ -25,7 +25,7 @@ class FirstOnboardingScreen extends StatelessWidget {
             children: [
               const SizedBox(height: 70),
 
-              // Logo Icon
+              
               Image.asset(
                 "assets/images/onboarding1.png",
                 height: 250,

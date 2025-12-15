@@ -12,7 +12,7 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    // Navigate to FirstOnboardingScreen after 2 seconds
+
     Future.delayed(const Duration(seconds: 2), () {
       Navigator.pushReplacement(
         context,
@@ -30,8 +30,8 @@ class _SplashScreenState extends State<SplashScreen> {
         decoration: const BoxDecoration(
           gradient: LinearGradient(
             colors: [
-              Color(0xFFA5D8FF), // Light blue
-              Color(0xFFE1C4FF), // Soft purple
+              Color(0xFFA5D8FF), 
+              Color(0xFFE1C4FF), 
             ],
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
