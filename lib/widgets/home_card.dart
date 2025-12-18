@@ -6,12 +6,14 @@ class HomeCard extends StatelessWidget {
     required this.title,
     this.subtitle,
     this.imagePath,
+    this.showImage = false,
     this.onTap,
   });
 
   final String title;
   final String? subtitle;
   final String? imagePath;
+  final bool showImage;
   final VoidCallback? onTap;
 
   @override
@@ -34,7 +36,7 @@ class HomeCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            if (imagePath != null) ...[
+            if (showImage && imagePath != null) ...[
               ClipRRect(
                 borderRadius: const BorderRadius.only(
                   topLeft: Radius.circular(12),

@@ -33,14 +33,13 @@ class HomeScreen extends StatelessWidget {
           const SearchField(hintText: 'Search sessions'),
           const SizedBox(height: 12),
 
-          // two image cards row
+          // two cards row (no images)
           Row(
             children: [
               Expanded(
                 child: HomeCard(
                   title: 'Yoga for Beginners',
                   subtitle: 'Start your yoga journey',
-                  imagePath: 'assets/images/onboarding.png',
                 ),
               ),
               const SizedBox(width: 12),
@@ -48,7 +47,6 @@ class HomeScreen extends StatelessWidget {
                 child: HomeCard(
                   title: 'Mindful Meditation',
                   subtitle: 'Find your inner peace',
-                  // imagePath: 'assets/images/onboarding1.png',
                 ),
               ),
             ],
@@ -56,11 +54,11 @@ class HomeScreen extends StatelessWidget {
 
           const SizedBox(height: 18),
 
-          // Quick Access Title
+        
           const Text('Quick Access', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700)),
           const SizedBox(height: 12),
 
-          // quick access buttons
+   
           Wrap(
             spacing: 12,
             runSpacing: 12,
@@ -87,11 +85,6 @@ class HomeScreen extends StatelessWidget {
                     Text('Find peace in the here and now.'),
                   ],
                 ),
-              ),
-              const SizedBox(width: 12),
-              ClipRRect(
-                borderRadius: BorderRadius.circular(8),
-                child: Image.asset('assets/images/onboarding.png', height: 72, width: 100, fit: BoxFit.cover),
               ),
             ],
           ),
