@@ -48,7 +48,7 @@ class HomeScreen extends StatelessWidget {
                 child: HomeCard(
                   title: 'Mindful Meditation',
                   subtitle: 'Find your inner peace',
-                  imagePath: 'assets/images/onboarding1.png',
+                  // imagePath: 'assets/images/onboarding1.png',
                 ),
               ),
             ],
