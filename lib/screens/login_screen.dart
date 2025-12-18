@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:tridivya_spritual_wellness_app/screens/signup_screen.dart';
 import '../widgets/my_button.dart';
 
-
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
 
@@ -15,6 +14,13 @@ class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController passwordController = TextEditingController();
 
   @override
+  void dispose() {
+    emailController.dispose();
+    passwordController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
@@ -24,8 +30,8 @@ class _LoginScreenState extends State<LoginScreen> {
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
             colors: [
-              Color(0xFFC6A8F4), 
-              Color(0xFF7CB0FF), 
+              Color(0xFFC6A8F4),
+              Color(0xFF7CB0FF),
             ],
           ),
         ),
@@ -35,8 +41,6 @@ class _LoginScreenState extends State<LoginScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-
-            
                 const Text(
                   "Tridivya",
                   style: TextStyle(
@@ -58,15 +62,13 @@ class _LoginScreenState extends State<LoginScreen> {
 
                 const SizedBox(height: 25),
 
-              
                 Image.asset(
-                  "assets/images/logo.png", 
+                  "assets/images/logo.png",
                   height: 60,
                 ),
 
                 const SizedBox(height: 40),
 
-               
                 const Align(
                   alignment: Alignment.centerLeft,
                   child: Text(
@@ -87,8 +89,8 @@ class _LoginScreenState extends State<LoginScreen> {
                     hintText: "you@gmail.com",
                     filled: true,
                     fillColor: Color(0xFFE5D9FF),
-                    contentPadding:
-                        const EdgeInsets.symmetric(horizontal: 20, vertical: 18),
+                    contentPadding: const EdgeInsets.symmetric(
+                        horizontal: 20, vertical: 18),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(16),
                       borderSide: BorderSide.none,
@@ -112,16 +114,15 @@ class _LoginScreenState extends State<LoginScreen> {
 
                 const SizedBox(height: 8),
 
-           
                 TextField(
                   controller: passwordController,
                   obscureText: true,
                   decoration: InputDecoration(
                     hintText: "*********",
                     filled: true,
-                    fillColor: Color(0xFFE5D9FF), // light purple
-                    contentPadding:
-                        const EdgeInsets.symmetric(horizontal: 20, vertical: 18),
+                    fillColor: Color(0xFFE5D9FF),
+                    contentPadding: const EdgeInsets.symmetric(
+                        horizontal: 20, vertical: 18),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(16),
                       borderSide: BorderSide.none,
@@ -130,7 +131,6 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
 
                 const SizedBox(height: 10),
-
 
                 Align(
                   alignment: Alignment.centerRight,
@@ -149,42 +149,49 @@ class _LoginScreenState extends State<LoginScreen> {
                   width: double.infinity,
                   child: MyButton(
                     text: "Sign In",
-                    color: const Color(0xFFE9B74D), 
-                    onPressed: () {},
+                    color: const Color(0xFFE9B74D),
+                    onPressed: () async {
+                      // Future login logic
+                      await Future.delayed(const Duration(seconds: 1));
+
+                      if (!mounted) return;
+
+                      // Navigate to Home later
+                    },
                   ),
                 ),
 
                 const SizedBox(height: 25),
 
                 Row(
-  mainAxisAlignment: MainAxisAlignment.center,
-  children: [
-    const Text(
-      "Don’t have account ? ",
-      style: TextStyle(color: Colors.white),
-    ),
-    GestureDetector(
-      onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => const SignupScreen(),
-          ),
-        );
-      },
-      child: const Text(
-        "Sign Up",
-        style: TextStyle(
-          color: Colors.white,
-          fontWeight: FontWeight.bold,
-          decoration: TextDecoration.underline,
-        ),
-      ),
-    ),
-  ],
-)
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Text(
+                      "Don’t have account ? ",
+                      style: TextStyle(color: Colors.white),
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        if (!mounted) return;
 
-
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => const SignupScreen(),
+                          ),
+                        );
+                      },
+                      child: const Text(
+                        "Sign Up",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          decoration: TextDecoration.underline,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ],
             ),
           ),

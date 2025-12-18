@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tridivya_spritual_wellness_app/screens/bottom_screen.dart/home_screen.dart';
+import 'package:tridivya_spritual_wellness_app/screens/button_screen_layout.dart';
 
 import '../widgets/my_button.dart';
 
@@ -200,7 +200,7 @@ class _SignupScreenState extends State<SignupScreen> {
                       Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(
-                          builder: (context) =>  HomeScreen(),
+                          builder: (context) => const BottomScreenLayout(),
                         ),
                       );
                     },

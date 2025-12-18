@@ -4,7 +4,7 @@ ThemeData getApplicationTheme(){
     return ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
-        fontFamily: 'OpenSans Regular',
+        fontFamily: 'OpenSans Bold',
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
           textStyle: const TextStyle(
