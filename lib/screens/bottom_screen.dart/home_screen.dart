@@ -1,113 +1,289 @@
 import 'package:flutter/material.dart';
-import 'package:tridivya_spritual_wellness_app/widgets/home_card.dart';
-import 'package:tridivya_spritual_wellness_app/widgets/search_field.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: ListView(
-        padding: const EdgeInsets.all(16),
-        children: [
-          // top title bar
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Text('Mindful Moments', style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600)),
-              const Spacer(),
-              IconButton(
-                onPressed: () {},
-                icon: const Icon(Icons.settings_outlined),
-              )
-            ],
-          ),
-          const SizedBox(height: 12),
-
-          // welcome text
-          const Text('Welcome, Anya!', style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold)),
-          const SizedBox(height: 12),
-
-          // search
-          const SearchField(hintText: 'Search sessions'),
-          const SizedBox(height: 12),
-
-          // two cards row (no images)
-          Row(
-            children: [
-              Expanded(
-                child: HomeCard(
-                  title: 'Yoga for Beginners',
-                  subtitle: 'Start your yoga journey',
-                ),
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: HomeCard(
-                  title: 'Mindful Meditation',
-                  subtitle: 'Find your inner peace',
-                ),
-              ),
-            ],
-          ),
-
-          const SizedBox(height: 18),
-
-        
-          const Text('Quick Access', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700)),
-          const SizedBox(height: 12),
-
-   
-          Wrap(
-            spacing: 12,
-            runSpacing: 12,
-            children: [
-              quickAccessButton(icon: Icons.self_improvement, label: 'Yoga'),
-              quickAccessButton(icon: Icons.self_improvement_outlined, label: 'Meditation'),
-              quickAccessButton(icon: Icons.music_note, label: 'Mantras'),
-            ],
-          ),
-
-          const SizedBox(height: 18),
-
-          // Daily Inspiration
-          const Text('Daily Inspiration', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
-          const SizedBox(height: 8),
-          Row(
-            children: [
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: const [
-                    Text('Embrace the present.', style: TextStyle(fontWeight: FontWeight.bold)),
-                    SizedBox(height: 6),
-                    Text('Find peace in the here and now.'),
-                  ],
-                ),
-              ),
-            ],
-          ),
-
-          const SizedBox(height: 32),
+    return Scaffold(
+      backgroundColor: Colors.white,
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        elevation: 0,
+        centerTitle: true,
+        title: const Text(
+          "Mindful Moments",
+          style: TextStyle(color: Colors.black),
+        ),
+        actions: const [
+          Icon(Icons.settings, color: Colors.black),
+          SizedBox(width: 12),
         ],
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16),
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+
+              // Welcome Text
+              const Text(
+                "Welcome, Anya!",
+                style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+
+              const SizedBox(height: 20),
+
+              // Top Cards
+              Row(
+                children: [
+                  Expanded(
+                    child: _sessionCard(
+                      title: "Yoga for Beginners",
+                      subtitle: "Start your yoga journey",
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: _sessionCard(
+                      title: "Mindful Meditation",
+                      subtitle: "Find your inner peace",
+                    ),
+                  ),
+                ],
+              ),
+
+              const SizedBox(height: 30),
+
+              // Quick Access
+              const Text(
+                "Quick Access",
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+
+              const SizedBox(height: 12),
+
+              Row(
+                children: [
+                  Expanded(
+                    child: _quickAccessCard(
+                      icon: Icons.self_improvement,
+                      label: "Yoga",
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: _quickAccessCard(
+                      icon: Icons.spa,
+                      label: "Meditation",
+                    ),
+                  ),
+                ],
+              ),
+
+              const SizedBox(height: 12),
+
+              SizedBox(
+                width: MediaQuery.of(context).size.width / 2 - 22,
+                child: _quickAccessCard(
+                  icon: Icons.music_note,
+                  label: "Mantras",
+                ),
+              ),
+
+              const SizedBox(height: 30),
+
+              // Daily Inspiration
+              const Text(
+                "Daily Inspiration",
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+
+              const SizedBox(height: 12),
+
+              Card(
+                elevation: 2,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: const [
+                      Text(
+                        "Embrace the present moment.",
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      SizedBox(height: 8),
+                      Text(
+                        "Find peace in the here and now.",
+                        style: TextStyle(color: Colors.grey),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+
+
+              const SizedBox(height: 12),
+
+              Card(
+                elevation: 2,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: const [
+                      Text(
+                        "Embrace the present moment.",
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      SizedBox(height: 8),
+                      Text(
+                        "Find peace in the here and now.",
+                        style: TextStyle(color: Colors.grey),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+
+              const SizedBox(height: 12),
+
+              Card(
+                elevation: 2,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: const [
+                      Text(
+                        "Embrace the present moment.",
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      SizedBox(height: 8),
+                      Text(
+                        "Find peace in the here and now.",
+                        style: TextStyle(color: Colors.grey),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              const SizedBox(height: 12),
+
+              Card(
+                elevation: 2,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: const [
+                      Text(
+                        "Embrace the present moment.",
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      SizedBox(height: 8),
+                      Text(
+                        "Find peace in the here and now.",
+                        style: TextStyle(color: Colors.grey),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
 
-  Widget quickAccessButton({required IconData icon, required String label}) {
-    return SizedBox(
-      width: 140,
-      child: OutlinedButton.icon(
-        onPressed: () {},
-        icon: Icon(icon, size: 20),
-        label: Text(label),
-        style: OutlinedButton.styleFrom(
-          padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 12),
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+  // Session Card
+  Widget _sessionCard({required String title, required String subtitle}) {
+    return Card(
+      elevation: 3,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(16),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Icon(Icons.favorite_border, size: 32),
+            const SizedBox(height: 16),
+            Text(
+              title,
+              style: const TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+            const SizedBox(height: 6),
+            Text(
+              subtitle,
+              style: const TextStyle(color: Colors.grey),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  // Quick Access Card
+  Widget _quickAccessCard({required IconData icon, required String label}) {
+    return Card(
+      elevation: 2,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 20),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(icon, size: 28),
+            const SizedBox(height: 8),
+            Text(
+              label,
+              style: const TextStyle(fontWeight: FontWeight.w500),
+            ),
+          ],
         ),
       ),
     );
   }
 }
-
