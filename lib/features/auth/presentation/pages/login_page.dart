@@ -25,10 +25,12 @@ class _LoginPageState extends ConsumerState<LoginPage> {
 
     final state = ref.read(authViewModelProvider);
     if (state.status == AuthStatus.authenticated) {
+      if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Logged in')));
       ref.read(authViewModelProvider.notifier).resetState();
       Navigator.pushReplacementNamed(context, '/home');
     } else if (state.status == AuthStatus.error) {
+      if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(state.errorMessage ?? 'Login failed')));
     }
   }

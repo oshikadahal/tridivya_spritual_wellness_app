@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:tridivya_spritual_wellness_app/screens/splash_screen.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:tridivya_spritual_wellness_app/app/app.dart';
+import 'package:tridivya_spritual_wellness_app/core/services/hive/hive_service.dart';
 
-
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  runApp(
-    const MaterialApp(
-      home: SplashScreen(),
-      debugShowCheckedModeBanner: false,
-    ),
-  );
+  await HiveService().init();
+  runApp(const ProviderScope(child: App()));
 }

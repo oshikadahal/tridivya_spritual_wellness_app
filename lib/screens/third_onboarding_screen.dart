@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tridivya_spritual_wellness_app/screens/login_screen.dart';
+import 'package:tridivya_spritual_wellness_app/features/auth/presentation/pages/login_page.dart';
 
 class ThirdOnboardingScreen extends StatelessWidget {
   const ThirdOnboardingScreen({super.key});
@@ -59,7 +59,7 @@ class ThirdOnboardingScreen extends StatelessWidget {
                   Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => const LoginScreen(),
+                      builder: (context) => const LoginPage(),
                     ),
                   );
                 },

@@ -29,10 +29,12 @@ class _SignupPageState extends ConsumerState<SignupPage> {
 
     final state = ref.read(authViewModelProvider);
     if (state.status == AuthStatus.registered) {
+      if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Registered successfully')));
       ref.read(authViewModelProvider.notifier).resetState();
       Navigator.pop(context);
     } else if (state.status == AuthStatus.error) {
+      if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(state.errorMessage ?? 'Registration failed')));
     }
   }

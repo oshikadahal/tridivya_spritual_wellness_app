@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tridivya_spritual_wellness_app/screens/signup_screen.dart';
+import 'package:tridivya_spritual_wellness_app/features/auth/presentation/pages/signup_page.dart';
 import '../widgets/my_button.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -177,7 +177,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (_) => const SignupScreen(),
+                            builder: (_) => const SignupPage(),
                           ),
                         );
                       },

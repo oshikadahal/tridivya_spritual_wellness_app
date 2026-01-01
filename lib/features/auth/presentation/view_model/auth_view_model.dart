@@ -3,6 +3,7 @@ import 'package:tridivya_spritual_wellness_app/features/auth/domain/usecases/reg
 import 'package:tridivya_spritual_wellness_app/features/auth/domain/usecases/login_usecase.dart';
 import 'package:tridivya_spritual_wellness_app/features/auth/presentation/state/auth_state.dart';
 import 'package:tridivya_spritual_wellness_app/features/auth/data/repositories/auth_repository.dart';
+import 'package:tridivya_spritual_wellness_app/features/auth/domain/repositories/auth_repository.dart' as domain_repo;
 
 final authViewModelProvider = StateNotifierProvider<AuthViewModel, AuthState>((ref) {
   final repo = ref.read(authRepositoryProvider);
@@ -10,7 +11,7 @@ final authViewModelProvider = StateNotifierProvider<AuthViewModel, AuthState>((r
 });
 
 class AuthViewModel extends StateNotifier<AuthState> {
-  final IAuthRepository _authRepository;
+  final domain_repo.IAuthRepository _authRepository;
 
   AuthViewModel(this._authRepository) : super(const AuthState());
 
