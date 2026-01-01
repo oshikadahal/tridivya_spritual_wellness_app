@@ -26,8 +26,6 @@ class HomeScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-
-              // Welcome Text
               const Text(
                 "Welcome, Anya!",
                 style: TextStyle(
@@ -39,7 +37,6 @@ class HomeScreen extends StatelessWidget {
 
               const SizedBox(height: 20),
 
-              // Top Cards
               Row(
                 children: [
                   Expanded(
@@ -60,7 +57,6 @@ class HomeScreen extends StatelessWidget {
 
               const SizedBox(height: 30),
 
-              // Quick Access
               const Text(
                 "Quick Access",
                 style: TextStyle(
@@ -102,7 +98,6 @@ class HomeScreen extends StatelessWidget {
 
               const SizedBox(height: 30),
 
-              // Daily Inspiration
               const Text(
                 "Daily Inspiration",
                 style: TextStyle(
@@ -142,7 +137,6 @@ class HomeScreen extends StatelessWidget {
                 ),
               ),
 
-
               const SizedBox(height: 12),
 
               Card(
@@ -173,35 +167,6 @@ class HomeScreen extends StatelessWidget {
                 ),
               ),
 
-              const SizedBox(height: 12),
-
-              Card(
-                elevation: 2,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(16),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: const [
-                      Text(
-                        "Embrace the present moment.",
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600,
-                          fontFamily: 'OpenSans Bold',
-                        ),
-                      ),
-                      SizedBox(height: 8),
-                      Text(
-                        "Find peace in the here and now.",
-                        style: TextStyle(color: Colors.grey, fontFamily: 'OpenSans Regular'),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
               const SizedBox(height: 12),
 
               Card(
@@ -238,7 +203,6 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  // Session Card
   Widget _sessionCard({required String title, required String subtitle}) {
     return Card(
       elevation: 3,
@@ -271,7 +235,6 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  // Quick Access Card
   Widget _quickAccessCard({required IconData icon, required String label}) {
     return Card(
       elevation: 2,

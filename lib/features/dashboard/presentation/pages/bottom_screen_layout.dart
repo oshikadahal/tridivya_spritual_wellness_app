@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:tridivya_spritual_wellness_app/screens/bottom_screen.dart/home_screen.dart';
-import 'package:tridivya_spritual_wellness_app/screens/bottom_screen.dart/profile_screen.dart';
-import 'package:tridivya_spritual_wellness_app/screens/bottom_screen.dart/progress_screen.dart';
-import 'package:tridivya_spritual_wellness_app/screens/bottom_screen.dart/sessions_screen.dart';
+import 'package:tridivya_spritual_wellness_app/features/dashboard/presentation/pages/home_page.dart';
+import 'package:tridivya_spritual_wellness_app/features/dashboard/presentation/pages/profile_page.dart';
+import 'package:tridivya_spritual_wellness_app/features/dashboard/presentation/pages/progress_page.dart';
+import 'package:tridivya_spritual_wellness_app/features/dashboard/presentation/pages/sessions_page.dart';
 
 
 class BottomScreenLayout extends StatefulWidget {
