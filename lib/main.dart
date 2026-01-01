@@ -5,6 +5,6 @@ import 'package:tridivya_spritual_wellness_app/core/services/hive/hive_service.d
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await HiveService().init();
+  await HiveService().init(); // uses platform documents directory by default
   runApp(const ProviderScope(child: App()));
 }
