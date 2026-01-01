@@ -13,7 +13,7 @@ class HomeScreen extends StatelessWidget {
         centerTitle: true,
         title: const Text(
           "Mindful Moments",
-          style: TextStyle(color: Colors.black),
+          style: TextStyle(color: Colors.black, fontFamily: 'OpenSans Bold'),
         ),
         actions: const [
           Icon(Icons.settings, color: Colors.black),
@@ -33,6 +33,7 @@ class HomeScreen extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
+                  fontFamily: 'OpenSans Bold',
                 ),
               ),
 
@@ -65,6 +66,7 @@ class HomeScreen extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.w600,
+                  fontFamily: 'OpenSans Bold',
                 ),
               ),
 
@@ -106,6 +108,7 @@ class HomeScreen extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.w600,
+                  fontFamily: 'OpenSans Bold',
                 ),
               ),
 
@@ -126,12 +129,13 @@ class HomeScreen extends StatelessWidget {
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w600,
+                          fontFamily: 'OpenSans Bold',
                         ),
                       ),
                       SizedBox(height: 8),
                       Text(
                         "Find peace in the here and now.",
-                        style: TextStyle(color: Colors.grey),
+                        style: TextStyle(color: Colors.grey, fontFamily: 'OpenSans Regular'),
                       ),
                     ],
                   ),
@@ -156,12 +160,13 @@ class HomeScreen extends StatelessWidget {
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w600,
+                          fontFamily: 'OpenSans Bold',
                         ),
                       ),
                       SizedBox(height: 8),
                       Text(
                         "Find peace in the here and now.",
-                        style: TextStyle(color: Colors.grey),
+                        style: TextStyle(color: Colors.grey, fontFamily: 'OpenSans Regular'),
                       ),
                     ],
                   ),
@@ -185,12 +190,13 @@ class HomeScreen extends StatelessWidget {
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w600,
+                          fontFamily: 'OpenSans Bold',
                         ),
                       ),
                       SizedBox(height: 8),
                       Text(
                         "Find peace in the here and now.",
-                        style: TextStyle(color: Colors.grey),
+                        style: TextStyle(color: Colors.grey, fontFamily: 'OpenSans Regular'),
                       ),
                     ],
                   ),
@@ -213,12 +219,13 @@ class HomeScreen extends StatelessWidget {
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w600,
+                          fontFamily: 'OpenSans Bold',
                         ),
                       ),
                       SizedBox(height: 8),
                       Text(
                         "Find peace in the here and now.",
-                        style: TextStyle(color: Colors.grey),
+                        style: TextStyle(color: Colors.grey, fontFamily: 'OpenSans Regular'),
                       ),
                     ],
                   ),
@@ -250,12 +257,13 @@ class HomeScreen extends StatelessWidget {
               style: const TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w600,
+                fontFamily: 'OpenSans Bold',
               ),
             ),
             const SizedBox(height: 6),
             Text(
               subtitle,
-              style: const TextStyle(color: Colors.grey),
+              style: const TextStyle(color: Colors.grey, fontFamily: 'OpenSans Regular'),
             ),
           ],
         ),
@@ -279,7 +287,7 @@ class HomeScreen extends StatelessWidget {
             const SizedBox(height: 8),
             Text(
               label,
-              style: const TextStyle(fontWeight: FontWeight.w500),
+              style: const TextStyle(fontWeight: FontWeight.w500, fontFamily: 'OpenSans Regular'),
             ),
           ],
         ),
