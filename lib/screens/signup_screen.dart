@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tridivya_spritual_wellness_app/screens/button_screen_layout.dart';
+import 'package:tridivya_spritual_wellness_app/features/dashboard/presentation/pages/bottom_screen_layout.dart';
 
 import '../widgets/my_button.dart';
 

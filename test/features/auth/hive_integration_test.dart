@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tridivya_spritual_wellness_app/core/services/hive/hive_service.dart';
 import 'package:tridivya_spritual_wellness_app/features/auth/data/models/auth_hive_model.dart';
-import 'package:tridivya_spritual_wellness_app/features/auth/data/datasources/local/auth_local_datasource.dart';
 
 void main() {
   group('HiveService integration', () {

@@ -12,7 +12,7 @@ class HiveService {
   /// Initialize Hive. If [dbPath] is provided it will be used instead of the
   /// platform-specific documents directory. This makes testing easier.
   Future<void> init({String? dbPath}) async {
-    final path = dbPath ?? (await getApplicationDocumentsDirectory()).path + '/${HiveTableConstant.dbName}';
+    final path = dbPath ?? '${(await getApplicationDocumentsDirectory()).path}/${HiveTableConstant.dbName}';
     Hive.init(path);
 
     _registerAdapters();

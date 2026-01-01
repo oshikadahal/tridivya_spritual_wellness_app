@@ -1,12 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:tridivya_spritual_wellness_app/app/routes/app_routes.dart';
-import 'package:tridivya_spritual_wellness_app/screens/button_screen_layout.dart';
-import 'package:tridivya_spritual_wellness_app/screens/first_onboarding_screen.dart';
-
-import 'package:tridivya_spritual_wellness_app/features/auth/presentation/pages/login_page.dart';
-import 'package:tridivya_spritual_wellness_app/features/auth/presentation/pages/signup_page.dart';
-import 'package:tridivya_spritual_wellness_app/screens/splash_screen.dart';
-import 'package:tridivya_spritual_wellness_app/screens/second_onboarding_screen.dart';
 import 'package:tridivya_spritual_wellness_app/app/routes/app_router.dart';
 
 
