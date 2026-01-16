@@ -3,75 +3,88 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tridivya_spritual_wellness_app/core/error/failures.dart';
 import 'package:tridivya_spritual_wellness_app/features/auth/data/datasources/auth_datasource.dart';
 import 'package:tridivya_spritual_wellness_app/features/auth/data/datasources/local/auth_local_datasource.dart';
+import 'package:tridivya_spritual_wellness_app/features/auth/data/datasources/remote/auth_remote_datasource.dart';
 import 'package:tridivya_spritual_wellness_app/features/auth/data/models/auth_hive_model.dart';
 import 'package:tridivya_spritual_wellness_app/features/auth/domain/entities/auth_entity.dart';
 import 'package:tridivya_spritual_wellness_app/features/auth/domain/repositories/auth_repository.dart';
 
 final authRepositoryProvider = Provider<IAuthRepository>((ref) {
-  final authDatasource = ref.read(authLocalDatasourceProvider);
-  return AuthRepository(authDatasource: authDatasource);
+  final remoteDatasource = ref.read(authRemoteDatasourceProvider);
+  final localDatasource = ref.read(authLocalDatasourceProvider);
+  return AuthRepository(
+    remoteDatasource: remoteDatasource,
+    localDatasource: localDatasource,
+  );
 });
 
 class AuthRepository implements IAuthRepository {
-  final IAuthDataSource _authDataSource;
+  final IAuthDataSource _remoteDatasource;
+  final IAuthDataSource _localDatasource;
 
-  AuthRepository({required IAuthDataSource authDatasource}) : _authDataSource = authDatasource;
+  AuthRepository({
+    required IAuthDataSource remoteDatasource,
+    required IAuthDataSource localDatasource,
+  })  : _remoteDatasource = remoteDatasource,
+        _localDatasource = localDatasource;
 
   @override
   Future<Either<Failure, bool>> registerUser(AuthEntity user) async {
     try {
-      final existingUser = await _authDataSource.getUserByEmail(user.email);
-      if (existingUser != null) {
-        return const Left(LocalDatabaseFailure(message: "This email has already been used!"));
-      }
-
       final authModel = AuthHiveModel.fromEntity(user);
-      final result = await _authDataSource.registerUser(authModel);
-
+      
+      // Try to register via API
+      final result = await _remoteDatasource.registerUser(authModel);
+      
       if (result) {
+        // Save to local database
+        await _localDatasource.registerUser(authModel);
         return const Right(true);
       }
 
-      return Left(LocalDatabaseFailure(message: "Failed to create your account, Please try again!"));
+      return const Left(ApiFailure(message: "Failed to create your account, Please try again!"));
     } catch (e) {
-      return Left(LocalDatabaseFailure(message: e.toString()));
+      return Left(ApiFailure(message: e.toString()));
     }
   }
 
   @override
   Future<Either<Failure, AuthEntity>> loginUser(String email, String password) async {
     try {
-      final user = await _authDataSource.loginUser(email, password);
+      // Try to login via API
+      final user = await _remoteDatasource.loginUser(email, password);
 
       if (user != null) {
+        // Save to local database
+        await _localDatasource.registerUser(user);
         final userEntity = user.toEntity();
         return Right(userEntity);
       }
 
-      return const Left(LocalDatabaseFailure(message: "Your email or password is incorrect, please try again!"));
+      return const Left(ApiFailure(message: "Your email or password is incorrect, please try again!"));
     } catch (e) {
-      return Left(LocalDatabaseFailure(message: e.toString()));
+      return Left(ApiFailure(message: e.toString()));
     }
   }
 
   @override
   Future<Either<Failure, bool>> logoutUser() async {
     try {
-      final result = await _authDataSource.logoutUser();
-      return Right(result);
+      await _remoteDatasource.logoutUser();
+      await _localDatasource.logoutUser();
+      return const Right(true);
     } catch (e) {
-      return Left(LocalDatabaseFailure(message: e.toString()));
+      return Left(ApiFailure(message: e.toString()));
     }
   }
 
   @override
   Future<Either<Failure, AuthEntity>> getCurrentUser() async {
     try {
-      final user = await _authDataSource.getCurrentUser();
+      final user = await _remoteDatasource.getCurrentUser();
       if (user != null) return Right(user.toEntity());
-      return const Left(LocalDatabaseFailure(message: "No current user"));
+      return const Left(ApiFailure(message: "No current user"));
     } catch (e) {
-      return Left(LocalDatabaseFailure(message: e.toString()));
+      return Left(ApiFailure(message: e.toString()));
     }
   }
 }
