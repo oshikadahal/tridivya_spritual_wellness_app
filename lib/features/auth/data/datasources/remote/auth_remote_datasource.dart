@@ -1,160 +1,76 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tridivya_spritual_wellness_app/core/api/api_client.dart';
 import 'package:tridivya_spritual_wellness_app/core/api/api_endpoints.dart';
+import 'package:tridivya_spritual_wellness_app/core/services/storage/user_session_service.dart';
 import 'package:tridivya_spritual_wellness_app/features/auth/data/datasources/auth_datasource.dart';
 import 'package:tridivya_spritual_wellness_app/features/auth/data/models/auth_api_model.dart';
-import 'package:tridivya_spritual_wellness_app/features/auth/data/models/auth_hive_model.dart';
 
-final authRemoteDatasourceProvider = Provider<IAuthDataSource>((ref) {
-  final apiClient = ref.read(apiClientProvider);
-  return AuthRemoteDatasource(apiClient: apiClient);
+
+//Create Provider
+final authRemoteDatasourceProvider = Provider<IAuthRemoteDataSource>((ref) {
+  return AuthRemoteDatasource(
+    apiClient: ref.read(apiClientProvider),
+    userSessionService: ref.read(userSessionServiceProvider),
+  );
 });
+  
 
-class AuthRemoteDatasource implements IAuthDataSource {
+class AuthRemoteDatasource implements IAuthRemoteDataSource {
   final ApiClient _apiClient;
+  final UserSessionService _userSessionService;
 
-  AuthRemoteDatasource({required ApiClient apiClient}) : _apiClient = apiClient;
+  AuthRemoteDatasource({
+    required ApiClient apiClient,
+    required UserSessionService userSessionService,
+  })  : _apiClient = apiClient,
+        _userSessionService = userSessionService;
+
 
   @override
-  Future<bool> registerUser(AuthHiveModel user) async {
-    try {
-      final response = await _apiClient.post(
-        ApiEndpoints.register,
-        data: {
-          'name': user.fullName,
-          'email': user.email,
-          'username': user.username,
-          'password': user.password,
-        },
+  Future<AuthApiModel?> login(String username, String password) async {
+    final response = await _apiClient.post(
+      ApiEndpoints.login,
+      data: {
+        'username': username,
+        'password': password,
+      },
+    );
+
+    if (response.data['success'] == true) {
+      final data = response.data['data'] as Map<String, dynamic>;
+      final user = AuthApiModel.fromJson(data);
+      // Save token to session
+      await _userSessionService.saveUserSession(
+        userId: user.id!,
+        email: user.email,
+        fullName: user.fullName,
+        username: user.username,
       );
-
-      if (response.statusCode == 201 || response.statusCode == 200) {
-        return true;
-      }
-      throw Exception('Failed to register user');
-    } catch (e) {
-      throw Exception('Registration error: ${e.toString()}');
+      return user;
     }
+    return null;
   }
 
   @override
-  Future<AuthHiveModel?> loginUser(String email, String password) async {
-    try {
-      final response = await _apiClient.post(
-        ApiEndpoints.login,
-        data: {
-          'email': email,
-          'password': password,
-        },
-      );
+  Future<AuthApiModel> register(AuthApiModel user) async {
+    final response = await _apiClient.post(
+      ApiEndpoints.register,
+      data: user.toJson(),
+    );
 
-      if (response.statusCode == 200) {
-        final data = response.data['data'] ?? response.data;
-        return AuthHiveModel.fromJson(data);
-      }
-      return null;
-    } catch (e) {
-      throw Exception('Login error: ${e.toString()}');
+    if (response.data['success'] == true) {
+      final data = response.data['data'] as Map<String, dynamic>;
+      final registeredUser = AuthApiModel.fromJson(data);
+      return registeredUser;
     }
+    return user;
   }
 
   @override
-  Future<AuthHiveModel?> getCurrentUser() async {
-    try {
-      final response = await _apiClient.get(ApiEndpoints.getCurrentUser);
-
-      if (response.statusCode == 200) {
-        final data = response.data['data'] ?? response.data;
-        return AuthHiveModel.fromJson(data);
-      }
-      return null;
-    } catch (e) {
-      throw Exception('Get current user error: ${e.toString()}');
-    }
+  Future<AuthApiModel?> getUserById(String authId) {
+    // TODO: implement getUserById
+    throw UnimplementedError();
   }
+  
 
-  @override
-  Future<bool> logoutUser() async {
-    try {
-      final response = await _apiClient.post(ApiEndpoints.logout);
-      return response.statusCode == 200;
-    } catch (e) {
-      throw Exception('Logout error: ${e.toString()}');
-    }
-  }
-
-  @override
-  Future<bool> doesEmailExist(String email) async {
-    try {
-      final response = await _apiClient.get(
-        ApiEndpoints.getCurrentUser,
-        queryParameters: {'email': email},
-      );
-      return response.statusCode == 200;
-    } catch (e) {
-      return false;
-    }
-  }
-
-  @override
-  Future<AuthHiveModel?> getUserById(String authId) async {
-    try {
-      final response = await _apiClient.get('${ApiEndpoints.getCurrentUser}/$authId');
-      if (response.statusCode == 200) {
-        final data = response.data['data'] ?? response.data;
-        return AuthHiveModel.fromJson(data);
-      }
-      return null;
-    } catch (e) {
-      throw Exception('Get user error: ${e.toString()}');
-    }
-  }
-
-  @override
-  Future<AuthHiveModel?> getUserByEmail(String email) async {
-    try {
-      final response = await _apiClient.get(
-        ApiEndpoints.getCurrentUser,
-        queryParameters: {'email': email},
-      );
-      if (response.statusCode == 200) {
-        final data = response.data['data'] ?? response.data;
-        return AuthHiveModel.fromJson(data);
-      }
-      return null;
-    } catch (e) {
-      return null;
-    }
-  }
-
-  @override
-  Future<bool> updateUser(AuthHiveModel user) async {
-    try {
-      final response = await _apiClient.put(
-        '${ApiEndpoints.getCurrentUser}/${user.id}',
-        data: {
-          'name': user.fullName,
-          'email': user.email,
-          'username': user.username,
-        },
-      );
-      return response.statusCode == 200;
-    } catch (e) {
-      throw Exception('Update user error: ${e.toString()}');
-    }
-  }
-
-  @override
-  Future<bool> deleteUser(String authId) async {
-    try {
-      final response = await _apiClient.delete(
-        '${ApiEndpoints.getCurrentUser}/$authId',
-      );
-      return response.statusCode == 200;
-    } catch (e) {
-      throw Exception('Delete user error: ${e.toString()}');
-    }
-  }
 }
-
-

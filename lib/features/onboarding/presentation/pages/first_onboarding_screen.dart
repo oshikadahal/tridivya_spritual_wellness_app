@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tridivya_spritual_wellness_app/features/auth/presentation/pages/login_screen.dart';
 import 'package:tridivya_spritual_wellness_app/features/onboarding/presentation/pages/second_onboarding_screen.dart';
-import 'package:tridivya_spritual_wellness_app/core/widgets/my_button.dart';
 
 class FirstOnboardingScreen extends StatefulWidget {
   final VoidCallback onNext;
@@ -14,117 +12,97 @@ class FirstOnboardingScreen extends StatefulWidget {
 class _FirstOnboardingScreenState extends State<FirstOnboardingScreen> {
   @override
   Widget build(BuildContext context) {
-    final screenHeight = MediaQuery.of(context).size.height;
-
     return Scaffold(
       body: Container(
         width: double.infinity,
-        height: double.infinity,
-        decoration: BoxDecoration(
-          image: DecorationImage(
-            image: const AssetImage('assets/images/first-onboarding.png'),
-            fit: BoxFit.cover,
-            colorFilter: ColorFilter.mode(
-              Colors.black.withOpacity(0.4),
-              BlendMode.darken,
-            ),
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            colors: [
+              Color(0xFFE0F2F9),
+              Color(0xFFDCC5F5),
+            ],
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
           ),
         ),
         child: SafeArea(
           child: Column(
             children: [
-              // Skip button at top
-              Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    ElevatedButton(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const LoginPage()),
-                        );
-                      },
-                      style: ElevatedButton.styleFrom(
-                        minimumSize: const Size(80, 40),
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 20, vertical: 12),
-                        backgroundColor: Colors.teal[600],
-                      ),
-                      child: const Text(
-                        "Skip",
-                        style: TextStyle(fontSize: 16, color: Colors.white),
-                      ),
-                    ),
-                  ],
+              const SizedBox(height: 70),
+
+              Image.asset(
+                'assets/images/onboarding1.png',
+                height: 250,
+                width: 250,
+              ),
+
+              const SizedBox(height: 20),
+
+              const Text(
+                'Tridivya',
+                style: TextStyle(
+                  fontSize: 32,
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xFF5A4DB7),
                 ),
               ),
 
-              // Centered content with buttons
-              Expanded(
-                child: Center(
-                  child: SingleChildScrollView(
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        const Text(
-                          "Welcome to Tridivya",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontSize: 28,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
-                          ),
-                        ),
-                        SizedBox(height: screenHeight * 0.03),
-                        const Text(
-                          "Discover wellness and spirituality in your unique way. Your journey to balance starts here.",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontSize: 18,
-                            height: 1.5,
-                            fontWeight: FontWeight.w300,
-                            color: Colors.white70,
-                          ),
-                        ),
-                        SizedBox(height: screenHeight * 0.05),
-                        const SizedBox(height: 20),
-                        const Text(
-                          "Your Wellness Journey",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontSize: 26,
-                            fontStyle: FontStyle.italic,
-                            color: Colors.white,
-                          ),
-                        ),
-                        SizedBox(height: screenHeight * 0.05),
+              const SizedBox(height: 10),
 
-                        // Back + Next btn
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            SizedBox(
-                              width: 140,
-                              height: 50,
-                              child: MyButton(
-                                text: "Next",
-                                onPressed: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            const SecondOnboardingScreen()),
-                                  );
-                                },
-                              ),
-                            ),
-                          ],
+              const Text(
+                'Balance your body and meditate',
+                style: TextStyle(
+                  fontSize: 16,
+                  color: Colors.black87,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+
+              const SizedBox(height: 20),
+
+              const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 40),
+                child: Text(
+                  'Practice yoga routines designed for peace, strength and inner harmony',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: Colors.black54,
+                    height: 1.4,
+                  ),
+                ),
+              ),
+
+              const Spacer(),
+
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 40),
+                child: SizedBox(
+                  width: double.infinity,
+                  height: 50,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFFCCAFFF),
+                      foregroundColor: Colors.white,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                    onPressed: () {
+                      widget.onNext();
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => const SecondOnboardingScreen(),
                         ),
-                      ],
+                      );
+                    },
+                    child: const Text(
+                      'Next',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
                   ),
                 ),

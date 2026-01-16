@@ -4,6 +4,7 @@ import 'package:tridivya_spritual_wellness_app/core/error/failures.dart';
 import 'package:tridivya_spritual_wellness_app/features/auth/data/repositories/auth_repository.dart';
 import 'package:tridivya_spritual_wellness_app/features/auth/domain/repositories/auth_repository.dart';
 
+
 // Create Provider
 final logoutUsecaseProvider = Provider<LogoutUseCase>((ref) {
   final authRepository = ref.read(authRepositoryProvider);

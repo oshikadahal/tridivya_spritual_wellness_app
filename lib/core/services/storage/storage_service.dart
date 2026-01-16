@@ -29,10 +29,8 @@ class StorageService {
       _prefs.setStringList(key, value);
   List<String>? getStringList(String key) => _prefs.getStringList(key);
 
-  // Remove
+  // Remove & Clear
   Future<bool> remove(String key) => _prefs.remove(key);
-
-  // Clear all
   Future<bool> clear() => _prefs.clear();
 
   // Check if key exists

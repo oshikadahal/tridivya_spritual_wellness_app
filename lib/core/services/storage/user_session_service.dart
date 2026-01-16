@@ -1,7 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import 'package:tridivya_spritual_wellness_app/core/providers/shared_preferences_provider.dart';
+
 
 // UserSessionService provider
 final userSessionServiceProvider = Provider<UserSessionService>((ref) {
@@ -50,23 +50,23 @@ class UserSessionService {
     return _prefs.getString(_keyUserId);
   }
 
-  // Get user email
-  String? getUserEmail() {
+  // Get current user email
+  String? getCurrentUserEmail() {
     return _prefs.getString(_keyUserEmail);
   }
 
-  // Get user full name
-  String? getUserFullName() {
+  // Get current user full name
+  String? getCurrentUserFullName() {
     return _prefs.getString(_keyUserFullName);
   }
 
-  // Get username
-  String? getUsername() {
+  // Get current user username
+  String? getCurrentUserUsername() {
     return _prefs.getString(_keyUserUsername);
   }
 
-  // Get profile picture
-  String? getProfilePicture() {
+  // Get current user profile picture
+  String? getCurrentUserProfilePicture() {
     return _prefs.getString(_keyUserProfilePicture);
   }
 
@@ -78,15 +78,5 @@ class UserSessionService {
     await _prefs.remove(_keyUserFullName);
     await _prefs.remove(_keyUserUsername);
     await _prefs.remove(_keyUserProfilePicture);
-  }
-
-  // Update profile picture
-  Future<void> updateProfilePicture(String profilePicture) async {
-    await _prefs.setString(_keyUserProfilePicture, profilePicture);
-  }
-
-  // Update user full name
-  Future<void> updateFullName(String fullName) async {
-    await _prefs.setString(_keyUserFullName, fullName);
   }
 }

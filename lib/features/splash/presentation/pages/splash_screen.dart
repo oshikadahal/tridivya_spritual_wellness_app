@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tridivya_spritual_wellness_app/app/routes/app_routes.dart';
-import 'package:tridivya_spritual_wellness_app/core/services/storage/user_session_service.dart';
-import 'package:tridivya_spritual_wellness_app/features/dashboard/presentation/pages/bottom_screen_layout.dart';
 import 'package:tridivya_spritual_wellness_app/features/onboarding/presentation/pages/first_onboarding_screen.dart';
 
 class SplashScreen extends ConsumerStatefulWidget {
@@ -20,22 +18,14 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
   }
 
   Future<void> _navigateToNext() async {
-    await Future.delayed(const Duration(seconds: 3));
+    await Future.delayed(const Duration(seconds: 2));
     if (!mounted) return;
 
-    // Check if user is already logged in
-    final userSessionService = ref.read(userSessionServiceProvider);
-    final isLoggedIn = userSessionService.isLoggedIn();
-
-    if (isLoggedIn) {
-      AppRoutes.pushReplacement(context, const BottomScreenLayout());
-    } else {
-      AppRoutes.pushReplacement(
-          context,
-          FirstOnboardingScreen(
-            onNext: () {},
-          ));
-    }
+    AppRoutes.pushReplacement(
+      FirstOnboardingScreen(
+        onNext: () {},
+      ),
+    );
   }
 
   @override
@@ -44,33 +34,42 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
       body: Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(
-            colors: [Color(0xFF136767), Color(0xFF0D5555)],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
+            colors: [Color(0xFFA5D8FF), Color(0xFFE1C4FF)],
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
           ),
         ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Center(
-              child: Image.asset(
-                'assets/images/logo2.png',
-                height: 150,
-                width: 150,
+        child: Center(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              // App Logo
+              Image.asset(
+                'assets/images/logo.png',
+                height: 160,
+                width: 160,
               ),
-            ),
-            const SizedBox(height: 20),
-            Padding(
-              padding: const EdgeInsets.all(12.0),
-              child: Text(
-                "Find Your Dream Destination With Us!",
+              SizedBox(height: 20),
+              // App Name
+              Text(
+                'Tridivya',
                 style: TextStyle(
-                  fontSize: 20,
+                  fontSize: 34,
+                  fontWeight: FontWeight.bold,
                   color: Colors.white,
                 ),
               ),
-            )
-          ],
+              SizedBox(height: 8),
+              // Subtitle
+              Text(
+                'Yoga . Meditate . Mantra',
+                style: TextStyle(
+                  fontSize: 18,
+                  color: Colors.white,
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

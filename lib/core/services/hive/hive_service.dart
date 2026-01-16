@@ -5,10 +5,16 @@ import 'package:tridivya_spritual_wellness_app/core/constants/hive_table_constan
 import 'package:tridivya_spritual_wellness_app/features/auth/data/models/auth_hive_model.dart';
 
 final hiveServiceProvider = Provider<HiveService>((ref) {
-  return HiveService();
+  return HiveService.instance;
 });
 
 class HiveService {
+  static final HiveService _instance = HiveService._internal();
+
+  HiveService._internal();
+
+  static HiveService get instance => _instance;
+
   /// Initialize Hive. If [dbPath] is provided it will be used instead of the
   /// platform-specific documents directory. This makes testing easier.
   Future<void> init({String? dbPath}) async {

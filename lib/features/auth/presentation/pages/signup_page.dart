@@ -39,7 +39,7 @@ class _SignupPageState extends ConsumerState<SignupPage> {
       return;
     }
 
-    await ref.read(authViewModelProvider.notifier).registerUser(
+    await ref.read(authViewModelProvider.notifier).register(
       fullName: _fullNameController.text.trim(),
       email: _emailController.text.trim(),
       username: _usernameController.text.trim(),

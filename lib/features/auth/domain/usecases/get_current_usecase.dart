@@ -5,6 +5,7 @@ import 'package:tridivya_spritual_wellness_app/features/auth/data/repositories/a
 import 'package:tridivya_spritual_wellness_app/features/auth/domain/entities/auth_entity.dart';
 import 'package:tridivya_spritual_wellness_app/features/auth/domain/repositories/auth_repository.dart';
 
+
 // Create Provider
 final getCurrentUserUsecaseProvider = Provider<GetCurrentUserUseCase>((ref) {
   final authRepository = ref.read(authRepositoryProvider);

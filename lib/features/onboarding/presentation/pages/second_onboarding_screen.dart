@@ -1,129 +1,102 @@
 import 'package:flutter/material.dart';
-import 'package:tridivya_spritual_wellness_app/features/onboarding/presentation/pages/third_onboarding_screen.dart';
-import 'package:tridivya_spritual_wellness_app/core/widgets/my_button.dart';
+import 'package:tridivya_spritual_wellness_app/features/onboarding/presentation/pages/third_onboarding_page.dart';
 
-class SecondOnboardingScreen extends StatefulWidget {
+
+class SecondOnboardingScreen extends StatelessWidget {
   const SecondOnboardingScreen({super.key});
 
   @override
-  State<SecondOnboardingScreen> createState() => _SecondOnboardingScreenState();
-}
-
-class _SecondOnboardingScreenState extends State<SecondOnboardingScreen> {
-  @override
   Widget build(BuildContext context) {
-    final screenHeight = MediaQuery.of(context).size.height;
-
     return Scaffold(
       body: Container(
         width: double.infinity,
-        height: double.infinity,
-        decoration: BoxDecoration(
-          image: DecorationImage(
-            image: const AssetImage('assets/images/second-onboarding.png'),
-            fit: BoxFit.cover,
-            colorFilter: ColorFilter.mode(
-              Colors.black.withOpacity(0.4),
-              BlendMode.darken,
-            ),
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            colors: [
+              Color(0xFFFCE1F8),
+              Color(0xFFD1E8F2),
+            ],
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
           ),
         ),
         child: SafeArea(
           child: Column(
             children: [
-              // Skip button at top
-              Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    ElevatedButton(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) =>
-                                  const ThirdOnboardingScreen()),
-                        );
-                      },
-                      style: ElevatedButton.styleFrom(
-                        minimumSize: const Size(80, 40),
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 20, vertical: 12),
-                        backgroundColor: Colors.teal[600],
-                      ),
-                      child: const Text(
-                        "Skip",
-                        style: TextStyle(fontSize: 16, color: Colors.white),
-                      ),
-                    ),
-                  ],
+              const SizedBox(height: 70),
+
+              Image.asset(
+                'assets/images/onboarding2.png',
+                height: 250,
+                width: 250,
+              ),
+
+              const SizedBox(height: 50),
+
+              const Text(
+                'Tridivya Wellness',
+                style: TextStyle(
+                  fontSize: 32,
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xFF5A4DB7),
                 ),
               ),
 
-              // Centered content with buttons
-              Expanded(
-                child: Center(
-                  child: SingleChildScrollView(
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        const Text(
-                          "Travel With Confidence",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontSize: 28,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
-                          ),
-                        ),
-                        SizedBox(height: screenHeight * 0.03),
-                        const Text(
-                          "See honest reviews from a global community so you always know you're booking the right place.",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontSize: 18,
-                            height: 1.5,
-                            fontWeight: FontWeight.w300,
-                            color: Colors.white70,
-                          ),
-                        ),
-                        SizedBox(height: screenHeight * 0.05),
-                        const SizedBox(height: 20),
-                        const Text(
-                          "Explore Nepal, TripWise!",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontSize: 26,
-                            fontStyle: FontStyle.italic,
-                            color: Colors.white,
-                          ),
-                        ),
-                        SizedBox(height: screenHeight * 0.05),
+              const SizedBox(height: 10),
 
-                        // Back + Next btn
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            SizedBox(
-                              width: 140,
-                              height: 50,
-                              child: MyButton(
-                                text: "Next",
-                                onPressed: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            const ThirdOnboardingScreen()),
-                                  );
-                                },
-                              ),
-                            ),
-                          ],
+              const Text(
+                'Enhance your mind and soul',
+                style: TextStyle(
+                  fontSize: 16,
+                  color: Colors.black87,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+
+              const SizedBox(height: 20),
+
+              const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 40),
+                child: Text(
+                  'Explore meditation exercises and mindful practices to rejuvenate your inner self',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: Colors.black54,
+                    height: 1.4,
+                  ),
+                ),
+              ),
+
+              const Spacer(),
+
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 40),
+                child: SizedBox(
+                  width: double.infinity,
+                  height: 50,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFFCCAFFF),
+                      foregroundColor: Colors.white,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => const ThirdOnboardingScreen(),
                         ),
-                      ],
+                      );
+                    },
+                    child: const Text(
+                      'Next',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
                   ),
                 ),

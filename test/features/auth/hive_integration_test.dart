@@ -11,7 +11,7 @@ void main() {
 
     setUp(() async {
       tmpDir = await Directory.systemTemp.createTemp('hive_test');
-      hiveService = HiveService();
+      hiveService = HiveService.instance;
       await hiveService.init(dbPath: tmpDir.path);
     });
 

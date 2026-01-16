@@ -25,7 +25,7 @@ class AuthViewModel extends StateNotifier<AuthState> {
     state = state.copyWith(status: AuthStatus.loading, errorMessage: null);
 
     final result = await RegisterUseCase(authRepository: _authRepository)(
-      RegisterUseCaseParams(
+      RegisterParams(
         fullName: fullName,
         email: email,
         username: username,
@@ -52,7 +52,7 @@ class AuthViewModel extends StateNotifier<AuthState> {
     state = state.copyWith(status: AuthStatus.loading, errorMessage: null);
 
     final result = await LoginUseCase(authRepository: _authRepository)(
-      LoginUseCaseParams(email: email, password: password),
+      LoginParams(email: email, password: password),
     );
 
     result.fold(

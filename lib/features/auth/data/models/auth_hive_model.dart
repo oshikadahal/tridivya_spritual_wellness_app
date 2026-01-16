@@ -1,11 +1,11 @@
 import 'package:hive/hive.dart';
-import 'package:tridivya_spritual_wellness_app/features/auth/domain/entities/auth_entity.dart';
 import 'package:tridivya_spritual_wellness_app/core/constants/hive_table_constant.dart';
+import 'package:tridivya_spritual_wellness_app/features/auth/domain/entities/auth_entity.dart';
 import 'package:uuid/uuid.dart';
 
 part 'auth_hive_model.g.dart';
 
-@HiveType(typeId: HiveTableConstant.userTypeId)
+@HiveType(typeId: 1)
 class AuthHiveModel extends HiveObject {
   @HiveField(0)
   final String? authId;
@@ -17,29 +17,17 @@ class AuthHiveModel extends HiveObject {
   final String email;
 
   @HiveField(3)
-  final String? phoneNumber;
-
-  @HiveField(4)
   final String username;
 
-  @HiveField(5)
+  @HiveField(4)
   final String? password;
-
-  @HiveField(6)
-  final String? batchId;
-
-  @HiveField(7)
-  final String? profilePicture;
 
   AuthHiveModel({
     String? authId,
     required this.fullName,
     required this.email,
-    this.phoneNumber,
     required this.username,
     this.password,
-    this.batchId,
-    this.profilePicture,
   }) : authId = authId ?? const Uuid().v4();
 
   // To Entity
@@ -50,7 +38,6 @@ class AuthHiveModel extends HiveObject {
       email: email,
       username: username,
       password: password,
-      profilePicture: profilePicture,
     );
   }
 
@@ -62,7 +49,21 @@ class AuthHiveModel extends HiveObject {
       email: entity.email,
       username: entity.username,
       password: entity.password,
-      profilePicture: entity.profilePicture,
     );
+  }
+
+  // To Entity List
+  static List<AuthEntity> toEntityList(List<AuthHiveModel> models) {
+    return models.map((model) => model.toEntity()).toList();
+  }
+
+  // To JSON for API
+  Map<String, dynamic> toJson() {
+    return {
+      'fullName': fullName,
+      'email': email,
+      'username': username,
+      'password': password,
+    };
   }
 }
