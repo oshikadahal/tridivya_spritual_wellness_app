@@ -15,25 +15,55 @@ class AuthViewModel extends StateNotifier<AuthState> {
 
   AuthViewModel(this._authRepository) : super(const AuthState());
 
-  Future<void> registerUser({required String fullName, required String email, required String username, required String password}) async {
+  Future<void> register({
+    required String fullName,
+    required String email,
+    required String username,
+    required String password,
+    String profilePicture = '',
+  }) async {
     state = state.copyWith(status: AuthStatus.loading, errorMessage: null);
 
-    final result = await RegisterUseCase(authRepository: _authRepository)(RegisterUseCaseParams(fullName: fullName, email: email, username: username, password: password));
+    final result = await RegisterUseCase(authRepository: _authRepository)(
+      RegisterUseCaseParams(
+        fullName: fullName,
+        email: email,
+        username: username,
+        password: password,
+      ),
+    );
 
     result.fold(
-      (failure) => state = state.copyWith(status: AuthStatus.error, errorMessage: failure.message),
-      (success) => state = state.copyWith(status: AuthStatus.registered, errorMessage: null),
+      (failure) => state = state.copyWith(
+        status: AuthStatus.error,
+        errorMessage: failure.message,
+      ),
+      (success) => state = state.copyWith(
+        status: AuthStatus.registered,
+        errorMessage: null,
+      ),
     );
   }
 
-  Future<void> loginUser({required String email, required String password}) async {
+  Future<void> login({
+    required String email,
+    required String password,
+  }) async {
     state = state.copyWith(status: AuthStatus.loading, errorMessage: null);
 
-    final result = await LoginUseCase(authRepository: _authRepository)(LoginUseCaseParams(email: email, password: password));
+    final result = await LoginUseCase(authRepository: _authRepository)(
+      LoginUseCaseParams(email: email, password: password),
+    );
 
     result.fold(
-      (failure) => state = state.copyWith(status: AuthStatus.error, errorMessage: failure.message),
-      (user) => state = state.copyWith(status: AuthStatus.authenticated, errorMessage: null),
+      (failure) => state = state.copyWith(
+        status: AuthStatus.error,
+        errorMessage: failure.message,
+      ),
+      (user) => state = state.copyWith(
+        status: AuthStatus.authenticated,
+        errorMessage: null,
+      ),
     );
   }
 

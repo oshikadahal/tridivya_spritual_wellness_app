@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tridivya_spritual_wellness_app/features/dashboard/presentation/pages/bottom_screen_layout.dart';
-import 'package:tridivya_spritual_wellness_app/features/auth/presentation/pages/signup_page.dart';
+import 'package:tridivya_spritual_wellness_app/features/auth/presentation/pages/register_screen.dart';
 import 'package:tridivya_spritual_wellness_app/features/auth/presentation/state/auth_state.dart';
 import 'package:tridivya_spritual_wellness_app/features/auth/presentation/view_model/auth_view_model.dart';
 import 'package:tridivya_spritual_wellness_app/core/utils/snackbar_utils.dart';
@@ -28,15 +28,6 @@ class _LoginPageState extends ConsumerState<LoginPage> {
   }
 
   Future<void> _handleLogin() async {
-    if (_emailController.text.trim().isEmpty ||
-        _passwordController.text.isEmpty) {
-      SnackbarUtils.showError(
-        context,
-        'Please fill all fields',
-      );
-      return;
-    }
-
     if (_formKey.currentState!.validate()) {
       await ref.read(authViewModelProvider.notifier).login(
             email: _emailController.text.trim(),
@@ -46,18 +37,14 @@ class _LoginPageState extends ConsumerState<LoginPage> {
   }
 
   void _navigateToRegister() {
-    AppRoutes.push(context, const SignupPage());
-  }
-
-  void _handleForgotPassword() {
-    SnackbarUtils.showInfo(context, 'Forgot password feature coming soon');
+    AppRoutes.push(context, const RegisterPage());
   }
 
   @override
   Widget build(BuildContext context) {
     final authState = ref.watch(authViewModelProvider);
+    final isLoading = authState.status == AuthStatus.loading;
 
-    // Listen to auth state changes
     ref.listen<AuthState>(authViewModelProvider, (previous, next) {
       if (next.status == AuthStatus.authenticated) {
         AppRoutes.pushReplacement(context, const BottomScreenLayout());
@@ -67,6 +54,9 @@ class _LoginPageState extends ConsumerState<LoginPage> {
     });
 
     return Scaffold(
+      appBar: AppBar(
+        title: const Text('Login'),
+      ),
       body: SafeArea(
         child: SingleChildScrollView(
           child: Padding(
@@ -77,41 +67,27 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const SizedBox(height: 40),
-                  Center(
-                    child: Image.asset(
-                      'assets/images/logo2.png',
-                      height: 120,
-                      width: 120,
+                  Text(
+                    'Login',
+                    style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
-                  const SizedBox(height: 15),
-                  Center(
-                    child: Text(
-                      "Login to your account",
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: Colors.teal,
-                        fontSize: 24,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 30),
+                  const SizedBox(height: 20),
                   TextFormField(
                     controller: _emailController,
                     keyboardType: TextInputType.emailAddress,
                     decoration: InputDecoration(
-                      hintText: "Enter your email address",
-                      labelText: "Email",
+                      labelText: 'Email',
                       border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
+                        borderRadius: BorderRadius.circular(8),
                       ),
                     ),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Please enter your email';
                       }
-                      if (!RegExp(r'^[^@]+@[^@]+\.[^@]+')
-                          .hasMatch(value)) {
+                      if (!RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(value)) {
                         return 'Please enter a valid email';
                       }
                       return null;
@@ -122,10 +98,9 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                     controller: _passwordController,
                     obscureText: _obscurePassword,
                     decoration: InputDecoration(
-                      hintText: "Enter your password",
-                      labelText: "Password",
+                      labelText: 'Password',
                       border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
+                        borderRadius: BorderRadius.circular(8),
                       ),
                       suffixIcon: IconButton(
                         icon: Icon(
@@ -144,37 +119,47 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                       if (value == null || value.isEmpty) {
                         return 'Please enter your password';
                       }
-                      if (value.length < 6) {
-                        return 'Password must be at least 6 characters';
-                      }
                       return null;
                     },
                   ),
-                  const SizedBox(height: 10),
-                  Align(
-                    alignment: Alignment.centerRight,
-                    child: TextButton(
-                      onPressed: _handleForgotPassword,
-                      child: const Text(
-                        "Forgot Password?",
-                        style: TextStyle(color: Colors.teal),
-                      ),
+                  const SizedBox(height: 30),
+                  SizedBox(
+                    width: double.infinity,
+                    height: 48,
+                    child: ElevatedButton(
+                      onPressed: isLoading ? null : _handleLogin,
+                      child: isLoading
+                          ? const SizedBox(
+                        height: 24,
+                        width: 24,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2,
+                        ),
+                      )
+                          : const Text('Login'),
                     ),
                   ),
                   const SizedBox(height: 20),
-                  SizedBox(
-                    width: double.infinity,
-                    child: ElevatedButton(
-                      onPressed:
-                          authState.status == AuthStatus.loading
-                              ? null
-                              : _handleLogin,
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.teal,
-                        padding: const EdgeInsets.symmetric(vertical: 12),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Text('New user? '),
+                      TextButton(
+                        onPressed: _navigateToRegister,
+                        child: const Text('Sign up'),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 20),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
                       ),
                       child: authState.status == AuthStatus.loading
                           ? const SizedBox(
