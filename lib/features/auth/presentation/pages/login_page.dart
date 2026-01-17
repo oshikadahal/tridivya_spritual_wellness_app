@@ -1,15 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tridivya_spritual_wellness_app/features/auth/presentation/pages/signup_page.dart';
+import 'package:tridivya_spritual_wellness_app/features/auth/presentation/state/auth_state.dart';
+import 'package:tridivya_spritual_wellness_app/features/auth/presentation/view_model/auth_view_model.dart';
+import 'package:tridivya_spritual_wellness_app/features/dashboard/presentation/pages/bottom_screen_layout.dart';
 import 'package:tridivya_spritual_wellness_app/widgets/my_button.dart';
 
-class LoginPage extends StatefulWidget {
+class LoginPage extends ConsumerStatefulWidget {
   const LoginPage({super.key});
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  ConsumerState<LoginPage> createState() => _LoginPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _LoginPageState extends ConsumerState<LoginPage> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
@@ -30,16 +34,29 @@ class _LoginPageState extends State<LoginPage> {
       // show errors — validators will display messages
       return;
     }
+    //1348011122
 
     setState(() => _isLoading = true);
-    // simulate login
-    await Future.delayed(const Duration(seconds: 1));
-    setState(() => _isLoading = false);
+
+    await ref.read(authViewModelProvider.notifier).login(
+      email: emailController.text.trim(),
+      password: passwordController.text,
+    );
 
     if (!mounted) return;
-    // TODO: replace with real auth flow
-    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Logged in')));
-    Navigator.pushReplacementNamed(context, '/home');
+    setState(() => _isLoading = false);
+
+    final state = ref.read(authViewModelProvider);
+    if (state.status == AuthStatus.authenticated) {
+      // success: show confirmation, reset state and navigate
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Logged in successfully')));
+      ref.read(authViewModelProvider.notifier).resetState();
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => const BottomScreenLayout()));    
+    } else if (state.status == AuthStatus.error) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(state.errorMessage ?? 'Login failed')));
+    }
   }
 
   @override
@@ -69,7 +86,7 @@ class _LoginPageState extends State<LoginPage> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   const Text(
-                    "Tridivya",
+                    "Tridivyaaa",
                     style: TextStyle(
                       fontSize: 42,
                       fontWeight: FontWeight.w600,

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:tridivya_spritual_wellness_app/features/auth/presentation/pages/login_page.dart';
 import 'package:tridivya_spritual_wellness_app/features/auth/presentation/state/auth_state.dart';
 import 'package:tridivya_spritual_wellness_app/features/auth/presentation/view_model/auth_view_model.dart';
 
@@ -38,11 +39,12 @@ class _SignupPageState extends ConsumerState<SignupPage> {
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Passwords do not match')));
       return;
     }
+    final trimemail = _emailController.text.trim();
 
     await ref.read(authViewModelProvider.notifier).register(
       fullName: _fullNameController.text.trim(),
-      email: _emailController.text.trim(),
-      username: _usernameController.text.trim(),
+      email: trimemail,
+      username: trimemail.split('@').first,
       password: _passwordController.text.trim(),
     );
 
@@ -51,8 +53,8 @@ class _SignupPageState extends ConsumerState<SignupPage> {
       // success: show confirmation, reset state and navigate
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Registered successfully')));
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => const LoginPage()));    
       ref.read(authViewModelProvider.notifier).resetState();
-      Navigator.pushReplacementNamed(context, '/login');
     } else if (state.status == AuthStatus.error) {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(state.errorMessage ?? 'Registration failed')));

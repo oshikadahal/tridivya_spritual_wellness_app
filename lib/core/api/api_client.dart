@@ -13,6 +13,8 @@ final apiClientProvider = Provider<ApiClient>((ref) {
 
 class ApiClient {
   late final Dio _dio;
+  final _storage = const FlutterSecureStorage();
+  static const String _tokenKey = 'auth_token';
 
   ApiClient() {
     _dio = Dio(
@@ -20,6 +22,7 @@ class ApiClient {
         baseUrl: ApiEndpoints.baseUrl,
         connectTimeout: ApiEndpoints.connectionTimeout,
         receiveTimeout: ApiEndpoints.receiveTimeout,
+        sendTimeout: ApiEndpoints.sendTimeout,
         headers: {
           'Content-Type': 'application/json',
           'Accept': 'application/json',
@@ -27,8 +30,8 @@ class ApiClient {
       ),
     );
 
-    // Add interceptors
-    _dio.interceptors.add(_AuthInterceptor());
+    // Add interceptors (order matters!)
+    _dio.interceptors.add(_AuthInterceptor(_storage));
 
     // Auto retry on network failures
     _dio.interceptors.add(
@@ -135,43 +138,68 @@ class ApiClient {
       onSendProgress: onSendProgress,
     );
   }
+
+  // Clear token
+  Future<void> clearToken() async {
+    await _storage.delete(key: _tokenKey);
+  }
 }
 
 // Auth Interceptor to add JWT token to requests
 class _AuthInterceptor extends Interceptor {
-  final _storage = const FlutterSecureStorage();
+  final FlutterSecureStorage _storage;
   static const String _tokenKey = 'auth_token';
 
+  // Public endpoints that don't require authentication
+  static const List<String> publicEndpoints = [
+    '/api/auth/register',
+    '/api/auth/login',
+    '/api/auth/forgot-password',
+  ];
+
+  _AuthInterceptor(this._storage);
+
   @override
-  void onRequest(
+  Future<void> onRequest(
     RequestOptions options,
     RequestInterceptorHandler handler,
   ) async {
-    // Skip auth for public endpoints
-    final publicEndpoints = [
-      ApiEndpoints.register,
-      ApiEndpoints.login,
-    ];
+    try {
+      // Check if endpoint is public (exact/endsWith to avoid false positives)
+      final requestPath = options.path;
+      final isPublicEndpoint = publicEndpoints.any(
+        (endpoint) => requestPath == endpoint || requestPath.endsWith(endpoint),
+      );
 
-    final isPublicEndpoint = publicEndpoints.any((endpoint) => options.path.startsWith(endpoint));
-
-    if (!isPublicEndpoint) {
-      final token = await _storage.read(key: _tokenKey);
-      if (token != null) {
-        options.headers['Authorization'] = 'Bearer $token';
+      if (!isPublicEndpoint) {
+        final token = await _storage.read(key: _tokenKey);
+        if (token != null && token.isNotEmpty) {
+          options.headers['Authorization'] = 'Bearer $token';
+        }
       }
-    }
 
-    handler.next(options);
+      handler.next(options);
+    } catch (e) {
+      print('Auth Interceptor Error: $e');
+      handler.next(options);
+    }
   }
 
   @override
-  void onError(DioException err, ErrorInterceptorHandler handler) {
+  Future<void> onError(
+    DioException err,
+    ErrorInterceptorHandler handler,
+  ) async {
     // Handle 401 Unauthorized - token expired
     if (err.response?.statusCode == 401) {
-      // Clear token and redirect to login
-      _storage.delete(key: _tokenKey);
-      // You can add navigation logic here or use a callback
+      try {
+        await _storage.delete(key: _tokenKey);
+        print('Token deleted due to 401 Unauthorized');
+        // TODO: Navigate to login screen
+        // You can use a global navigator key or a callback
+      } catch (e) {
+        print('Error clearing token: $e');
+      }
     }
     handler.next(err);
   }

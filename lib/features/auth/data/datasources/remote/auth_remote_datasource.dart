@@ -31,7 +31,7 @@ class AuthRemoteDatasource implements IAuthRemoteDataSource {
     final response = await _apiClient.post(
       ApiEndpoints.login,
       data: {
-        'username': username,
+        'email': username,
         'password': password,
       },
     );

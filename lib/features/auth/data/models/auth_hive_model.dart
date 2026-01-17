@@ -1,5 +1,5 @@
 import 'package:hive/hive.dart';
-import 'package:tridivya_spritual_wellness_app/core/constants/hive_table_constant.dart';
+
 import 'package:tridivya_spritual_wellness_app/features/auth/domain/entities/auth_entity.dart';
 import 'package:uuid/uuid.dart';
 
