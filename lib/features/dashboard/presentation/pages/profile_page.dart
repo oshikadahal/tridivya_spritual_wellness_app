@@ -1,17 +1,37 @@
 import 'package:flutter/material.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:tridivya_spritual_wellness_app/core/services/storage/user_session_service.dart';
 
-class ProfileScreen extends StatefulWidget {
+class ProfileScreen extends ConsumerStatefulWidget {
   const ProfileScreen({super.key});
 
   @override
-  State<ProfileScreen> createState() => _ProfileScreenState();
+  ConsumerState<ProfileScreen> createState() => _ProfileScreenState();
 }
 
-class _ProfileScreenState extends State<ProfileScreen> {
+class _ProfileScreenState extends ConsumerState<ProfileScreen> {
   File? _profileImage;
   final ImagePicker _imagePicker = ImagePicker();
+  String? userName;
+  String? userEmail;
+  String? userProfilePicture;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadUserData();
+  }
+
+  void _loadUserData() {
+    final userSessionService = ref.read(userSessionServiceProvider);
+    setState(() {
+      userName = userSessionService.getCurrentUserFullName() ?? 'Guest User';
+      userEmail = userSessionService.getCurrentUserEmail() ?? '';
+      userProfilePicture = userSessionService.getCurrentUserProfilePicture();
+    });
+  }
 
   Future<void> _pickImageFromGallery() async {
     try {
@@ -188,17 +208,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         ),
                       ),
                       const SizedBox(height: 16),
-                      const Text(
-                        'Ananya Sharma',
-                        style: TextStyle(
+                      Text(
+                        userName ?? 'Guest User',
+                        style: const TextStyle(
                           fontSize: 22,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
                       const SizedBox(height: 8),
-                      const Text(
-                        'Embrace the present, find your peace',
-                        style: TextStyle(
+                      Text(
+                        userEmail ?? 'Embrace the present, find your peace',
+                        style: const TextStyle(
                           fontSize: 14,
                           color: Colors.grey,
                         ),
