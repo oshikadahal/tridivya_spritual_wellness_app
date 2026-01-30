@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -146,6 +148,35 @@ class AuthRepository implements IAuthRepository {
       return const Left(LocalDatabaseFailure(message: "Failed to logout"));
     } catch (e) {
       return Left(LocalDatabaseFailure(message: e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, String>> updateProfileImage(String imagePath) async {
+    if (await _networkInfo.isConnected) {
+      try {
+        if (imagePath.isEmpty) {
+          return const Left(ApiFailure(message: 'Image path is required'));
+        }
+
+        final imageUrl = await _authRemoteDataSource.updateProfileImage(
+          File(imagePath),
+        );
+        return Right(imageUrl);
+      } on DioException catch (e) {
+        return Left(
+          ApiFailure(
+            message: e.response?.data['message'] ?? 'Update failed',
+            statusCode: e.response?.statusCode,
+          ),
+        );
+      } catch (e) {
+        return Left(ApiFailure(message: e.toString()));
+      }
+    } else {
+      return const Left(
+        ApiFailure(message: 'No internet connection. Cannot update user.'),
+      );
     }
   }
 }

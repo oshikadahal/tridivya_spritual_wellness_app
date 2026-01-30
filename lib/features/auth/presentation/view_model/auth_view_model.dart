@@ -1,6 +1,9 @@
+import 'dart:io';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tridivya_spritual_wellness_app/features/auth/domain/usecases/register_usecase.dart';
 import 'package:tridivya_spritual_wellness_app/features/auth/domain/usecases/login_usecase.dart';
+import 'package:tridivya_spritual_wellness_app/features/auth/domain/usecases/update_profile_usecase.dart';
 import 'package:tridivya_spritual_wellness_app/features/auth/presentation/state/auth_state.dart';
 import 'package:tridivya_spritual_wellness_app/features/auth/data/repositories/auth_repository.dart';
 import 'package:tridivya_spritual_wellness_app/features/auth/domain/repositories/auth_repository.dart' as domain_repo;
@@ -64,6 +67,28 @@ class AuthViewModel extends StateNotifier<AuthState> {
         status: AuthStatus.authenticated,
         errorMessage: null,
       ),
+    );
+  }
+
+  Future<String?> updateProfileImage(File image) async {
+    state = state.copyWith(status: AuthStatus.loading, errorMessage: null);
+
+    final result = await UpdateProfileUseCase(authRepository: _authRepository)(
+      UpdateProfileParams(imagePath: image.path),
+    );
+
+    return result.fold(
+      (failure) {
+        state = state.copyWith(
+          status: AuthStatus.error,
+          errorMessage: failure.message,
+        );
+        return null;
+      },
+      (imagePath) {
+        state = state.copyWith(status: AuthStatus.initial, errorMessage: null);
+        return imagePath.isNotEmpty ? imagePath : null;
+      },
     );
   }
 

@@ -70,6 +70,14 @@ class UserSessionService {
     return _prefs.getString(_keyUserProfilePicture);
   }
 
+  Future<void> updateProfilePicture(String? profilePicture) async {
+    if (profilePicture == null || profilePicture.isEmpty) {
+      await _prefs.remove(_keyUserProfilePicture);
+      return;
+    }
+    await _prefs.setString(_keyUserProfilePicture, profilePicture);
+  }
+
   // Clear user session (logout)
   Future<void> clearSession() async {
     await _prefs.remove(_keyIsLoggedIn);

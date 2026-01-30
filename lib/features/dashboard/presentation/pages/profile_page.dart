@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:tridivya_spritual_wellness_app/features/auth/presentation/view_model/auth_view_model.dart';
 import 'package:tridivya_spritual_wellness_app/core/services/storage/user_session_service.dart';
 
 class ProfileScreen extends ConsumerStatefulWidget {
@@ -33,14 +35,80 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
     });
   }
 
+  Future<bool> _ensurePermission(
+    BuildContext context,
+    Permission permission,
+  ) async {
+    final status = await permission.status;
+    if (status.isGranted) return true;
+
+    if (status.isDenied) {
+      final result = await permission.request();
+      if (result.isGranted) return true;
+      if (result.isPermanentlyDenied) {
+        _showPermissionDeniedDialog(context);
+      }
+      return false;
+    }
+
+    if (status.isPermanentlyDenied) {
+      _showPermissionDeniedDialog(context);
+    }
+    return false;
+  }
+
+  void _showPermissionDeniedDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Give Permission'),
+        content: const Text(
+          'Permission permanently denied. Please enable it from App Settings.',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: const Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () async {
+              Navigator.of(context).pop();
+              await openAppSettings();
+            },
+            child: const Text('Open Settings'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Future<void> _uploadProfileImage(File image) async {
+    final uploadedPath = await ref
+        .read(authViewModelProvider.notifier)
+        .updateProfileImage(image);
+
+    if (uploadedPath != null && mounted) {
+      await ref
+          .read(userSessionServiceProvider)
+          .updateProfilePicture(uploadedPath);
+    }
+  }
+
   Future<void> _pickImageFromGallery() async {
     try {
+      final hasPermission = await _ensurePermission(
+        context,
+        Platform.isIOS ? Permission.photos : Permission.storage,
+      );
+      if (!hasPermission) return;
+
       final XFile? pickedFile =
           await _imagePicker.pickImage(source: ImageSource.gallery);
       if (pickedFile != null) {
         setState(() {
           _profileImage = File(pickedFile.path);
         });
+        await _uploadProfileImage(File(pickedFile.path));
       }
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -51,12 +119,17 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
 
   Future<void> _pickImageFromCamera() async {
     try {
+      final hasPermission =
+          await _ensurePermission(context, Permission.camera);
+      if (!hasPermission) return;
+
       final XFile? pickedFile =
           await _imagePicker.pickImage(source: ImageSource.camera);
       if (pickedFile != null) {
         setState(() {
           _profileImage = File(pickedFile.path);
         });
+        await _uploadProfileImage(File(pickedFile.path));
       }
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(

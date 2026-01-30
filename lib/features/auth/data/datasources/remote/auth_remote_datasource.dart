@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tridivya_spritual_wellness_app/core/api/api_client.dart';
 import 'package:tridivya_spritual_wellness_app/core/api/api_endpoints.dart';
@@ -70,6 +73,33 @@ class AuthRemoteDatasource implements IAuthRemoteDataSource {
   Future<AuthApiModel?> getUserById(String authId) {
     // TODO: implement getUserById
     throw UnimplementedError();
+  }
+
+  @override
+  Future<String> updateProfileImage(File image) async {
+    final fileName = image.path.split('/').last;
+
+    final formData = FormData.fromMap({
+      'profilePicture': await MultipartFile.fromFile(
+        image.path,
+        filename: fileName,
+      ),
+    });
+
+    final response = await _apiClient.put(
+      ApiEndpoints.updateProfile,
+      data: formData,
+      options: Options(contentType: 'multipart/form-data'),
+    );
+
+    if (response.data['success'] == true) {
+      final data = response.data['data'] as Map<String, dynamic>;
+      final profilePath =
+          (data['profilePicture'] ?? data['image'] ?? '') as String;
+      return profilePath;
+    }
+
+    throw Exception('Failed to update profile image');
   }
   
 
