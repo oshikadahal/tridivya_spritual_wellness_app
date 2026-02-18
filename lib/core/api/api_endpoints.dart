@@ -18,13 +18,22 @@
 
 // }
 
-// import 'package:flutter/foundation.dart';
-
+import 'package:flutter/foundation.dart';
 
 class ApiEndpoints {
   // ============== BASE URL ==============
-  // For local development (Android emulator uses 10.0.2.2 to reach host)
-  static const String baseUrl = "http://10.0.2.2:5050";
+  // Use host loopback on web/desktop; use Android emulator loopback on Android.
+  // Adjust `_localPort` to match your backend port.
+  static const int _localPort = 5051;
+  static const String _androidEmulatorHost = 'http://10.0.2.2';
+  static const String _localhostHost = 'http://localhost';
+
+  // Getter (not const) so we can switch per platform without importing dart:io on web.
+  static String get baseUrl {
+    // Web/desktop hit localhost; Android emulator hits 10.0.2.2
+    final host = kIsWeb ? _localhostHost : _androidEmulatorHost;
+    return '$host:$_localPort';
+  }
   // For production (uncomment and set your deployed API URL)
   // static const String baseUrl = "https://yourapp.example.com";
 

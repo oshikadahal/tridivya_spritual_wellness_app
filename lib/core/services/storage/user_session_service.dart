@@ -87,4 +87,7 @@ class UserSessionService {
     await _prefs.remove(_keyUserUsername);
     await _prefs.remove(_keyUserProfilePicture);
   }
+
+  // Alias for clearSession for consistency
+  Future<void> clearUserSession() => clearSession();
 }

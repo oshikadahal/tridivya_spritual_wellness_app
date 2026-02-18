@@ -48,7 +48,7 @@ class AuthApiModel{
       fullName: (json['name'] ?? json['fullName'] ?? '') as String,
       email: (json['email'] ?? '') as String,
       username: (json['username'] ?? '') as String,
-     
+      profilePicture: json['profilePicture'] as String?,
     );
   }
 
@@ -59,7 +59,7 @@ AuthEntity toEntity() {
       fullName: fullName,
       email: email,
       username: username,
-      
+      profilePicture: profilePicture,
     );
   }
 
@@ -70,7 +70,7 @@ AuthEntity toEntity() {
       email: entity.email,
       username: entity.username,
       password: entity.password,
-     
+      profilePicture: entity.profilePicture,
     );
   }
 

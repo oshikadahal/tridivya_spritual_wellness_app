@@ -21,90 +21,95 @@ class FirstOnboardingScreen extends StatelessWidget {
           ),
         ),
         child: SafeArea(
-          child: Column(
-            children: [
-              const SizedBox(height: 70),
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 40),
+              child: Column(
+                children: [
+                  const SizedBox(height: 30),
 
-              
-              Image.asset(
-                "assets/images/onboarding1.png",
-                height: 250,
-                width: 250,
-              ),
-
-              const SizedBox(height: 20),
-
-              // Title
-              const Text(
-                "Tridivya",
-                style: TextStyle(
-                  fontSize: 32,
-                  fontWeight: FontWeight.bold,
-                  color: Color(0xFF5A4DB7),
-                ),
-              ),
-
-              const SizedBox(height: 10),
-
-              // Small title description
-              const Text(
-                "Balance your body and meditate",
-                style: TextStyle(
-                  fontSize: 16,
-                  color: Colors.black87,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-
-              const SizedBox(height: 20),
-
-              // Paragraph text
-              const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 40),
-                child: Text(
-                  "Practice yoga routines designed for peace, strength and inner harmony",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 14,
-                    color: Colors.black54,
-                    height: 1.4,
+                  Image.asset(
+                    "assets/images/onboarding1.png",
+                    height: 250,
+                    width: 250,
                   ),
-                ),
-              ),
 
-              const Spacer(),
+                  const SizedBox(height: 20),
 
-              // Next Button
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 40),
-                child: SizedBox(
-                  width: double.infinity,
-                  height: 50,
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFFCCAFFF),
-                      foregroundColor: Colors.white,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
+                  // Title
+                  const Text(
+                    "Tridivya",
+                    style: TextStyle(
+                      fontSize: 32,
+                      fontWeight: FontWeight.bold,
+                      color: Color(0xFF5A4DB7),
                     ),
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (_) => const SecondOnboardingScreen()),
-                      );
-                    },
-                    child: const Text(
-                      "Next",
+                  ),
+
+                  const SizedBox(height: 10),
+
+                  // Small title description
+                  const Text(
+                    "Balance your body and meditate",
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Colors.black87,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+
+                  const SizedBox(height: 20),
+
+                  // Paragraph text
+                  const Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 40),
+                    child: Text(
+                      "Practice yoga routines designed for peace, strength and inner harmony",
+                      textAlign: TextAlign.center,
                       style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w600,
+                        fontSize: 14,
+                        color: Colors.black54,
+                        height: 1.4,
                       ),
                     ),
                   ),
-                ),
+
+                  const SizedBox(height: 30),
+
+                  // Next Button
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 40),
+                    child: SizedBox(
+                      width: double.infinity,
+                      height: 50,
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: const Color(0xFFCCAFFF),
+                          foregroundColor: Colors.white,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                        ),
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (_) => const SecondOnboardingScreen()),
+                          );
+                        },
+                        child: const Text(
+                          "Next",
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                ],
               ),
-            ],
+            ),
           ),
         ),
       ),

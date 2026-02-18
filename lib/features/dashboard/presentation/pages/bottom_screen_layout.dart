@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:tridivya_spritual_wellness_app/features/dashboard/presentation/pages/home_page.dart';
-import 'package:tridivya_spritual_wellness_app/features/dashboard/presentation/pages/profile_page.dart';
-import 'package:tridivya_spritual_wellness_app/features/dashboard/presentation/pages/progress_page.dart';
-import 'package:tridivya_spritual_wellness_app/features/dashboard/presentation/pages/sessions_page.dart';
+import 'package:tridivya_spritual_wellness_app/features/dashboard/presentation/pages/bottom_screen/home_screen.dart';
+import 'package:tridivya_spritual_wellness_app/features/dashboard/presentation/pages/bottom_screen/meditation_screen.dart';
+import 'package:tridivya_spritual_wellness_app/features/dashboard/presentation/pages/bottom_screen/yoga_screen.dart';
+import 'package:tridivya_spritual_wellness_app/features/dashboard/presentation/pages/bottom_screen/mantra_screen.dart';
+import 'package:tridivya_spritual_wellness_app/features/dashboard/presentation/pages/bottom_screen/library_screen.dart';
 
 
 class BottomScreenLayout extends StatefulWidget {
@@ -15,11 +16,12 @@ class BottomScreenLayout extends StatefulWidget {
 class _BottomScreenLayoutState extends State<BottomScreenLayout> {
   int _selectedIndex = 0;
 
-  List<Widget> lstBottomScreen = [
-    const HomeScreen(),
-    const SessionsScreen(),
-    const ProgressScreen(),
-    const ProfileScreen(),
+  List<Widget> lstBottomScreen = const [
+    HomeScreen(),
+    MeditationScreen(),
+    YogaScreen(),
+    MantraScreen(),
+    LibraryScreen(),
   ];
   @override
   Widget build(BuildContext context) {
@@ -29,26 +31,15 @@ class _BottomScreenLayoutState extends State<BottomScreenLayout> {
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
         items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Home',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.shopping_bag),
-            label: 'Sessions',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: 'Progress',
-          ),
-            BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: 'Profile',
-          ),
+          BottomNavigationBarItem(icon: Icon(Icons.home_outlined), label: 'Home'),
+          BottomNavigationBarItem(icon: Icon(Icons.spa_outlined), label: 'Meditation'),
+          BottomNavigationBarItem(icon: Icon(Icons.fitness_center_outlined), label: 'Yoga'),
+          BottomNavigationBarItem(icon: Icon(Icons.music_note_outlined), label: 'Mantra'),
+          BottomNavigationBarItem(icon: Icon(Icons.menu_book_outlined), label: 'Library'),
         ],
-        unselectedItemColor: Colors.black,
-        backgroundColor: Colors.amber,
-        selectedItemColor: Colors.white,
+        unselectedItemColor: Colors.grey,
+        selectedItemColor: const Color(0xFF7C4DFF),
+        backgroundColor: Colors.white,
         currentIndex: _selectedIndex,
         onTap: (index) {
           setState(() {

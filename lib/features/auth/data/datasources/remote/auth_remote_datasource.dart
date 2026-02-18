@@ -77,29 +77,45 @@ class AuthRemoteDatasource implements IAuthRemoteDataSource {
 
   @override
   Future<String> updateProfileImage(File image) async {
-    final fileName = image.path.split('/').last;
+    try {
+      final fileName = image.path.split(Platform.isWindows ? '\\' : '/').last;
 
-    final formData = FormData.fromMap({
-      'profilePicture': await MultipartFile.fromFile(
-        image.path,
-        filename: fileName,
-      ),
-    });
+      final formData = FormData.fromMap({
+        'profilePicture': await MultipartFile.fromFile(
+          image.path,
+          filename: fileName,
+        ),
+      });
 
-    final response = await _apiClient.put(
-      ApiEndpoints.updateProfile,
-      data: formData,
-      options: Options(contentType: 'multipart/form-data'),
-    );
+      final response = await _apiClient.put(
+        ApiEndpoints.updateProfile,
+        data: formData,
+        options: Options(contentType: 'multipart/form-data'),
+      );
 
-    if (response.data['success'] == true) {
-      final data = response.data['data'] as Map<String, dynamic>;
-      final profilePath =
-          (data['profilePicture'] ?? data['image'] ?? '') as String;
-      return profilePath;
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        final responseData = response.data;
+        
+        // Handle different response structures
+        if (responseData is Map<String, dynamic>) {
+          if (responseData['success'] == true && responseData['data'] != null) {
+            final data = responseData['data'] as Map<String, dynamic>;
+            final profilePath = (data['profilePicture'] ?? data['image'] ?? data['path'] ?? '') as String;
+            if (profilePath.isNotEmpty) {
+              return profilePath;
+            }
+          }
+          // If we got here but success is true, return the image path as fallback
+          if (responseData['success'] == true) {
+            return image.path;
+          }
+        }
+      }
+
+      throw Exception('Failed to update profile image: Invalid response');
+    } catch (e) {
+      throw Exception('Error uploading profile image: ${e.toString()}');
     }
-
-    throw Exception('Failed to update profile image');
   }
   
 
