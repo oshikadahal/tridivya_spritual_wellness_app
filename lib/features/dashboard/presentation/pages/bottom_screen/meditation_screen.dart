@@ -59,12 +59,18 @@ class MeditationScreen extends StatelessWidget {
           onPressed: () => Navigator.of(context).pop(),
         ),
         const SizedBox(width: 6),
-        Text(
-          'Tridivya',
-          style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                fontWeight: FontWeight.w700,
-                color: Colors.black,
-              ),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Tridivya',
+              style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                    fontWeight: FontWeight.w700,
+                    color: Colors.black,
+                  ),
+            ),
+            Text('Meditation Library', style: Theme.of(context).textTheme.bodySmall?.copyWith(color: _muted)),
+          ],
         ),
         const Spacer(),
         IconButton(

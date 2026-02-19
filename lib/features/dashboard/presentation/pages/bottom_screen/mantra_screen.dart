@@ -223,6 +223,16 @@ class MantraScreen extends StatelessWidget {
       {'title': 'Gayatri Mantra', 'subtitle': 'Universal prayer for spiritual...', 'icon': Icons.play_circle_fill},
       {'title': 'Maha Mrityunjaya', 'subtitle': 'A powerful healing mantra for...', 'icon': Icons.play_circle_fill},
       {'title': 'Om Mani Padme Hum', 'subtitle': 'The jewel in the lotus, mantra of...', 'icon': Icons.play_circle_fill},
+      {'title': 'Hanuman Chalisa', 'subtitle': 'Strength, courage, devotion and...', 'icon': Icons.play_circle_fill},
+      {'title': 'Om Namah Shivaya', 'subtitle': 'Salutation to Lord Shiva, inner...', 'icon': Icons.play_circle_fill},
+      {'title': 'Vishnu Sahasranamam', 'subtitle': '1,000 names of Vishnu for peace...', 'icon': Icons.play_circle_fill},
+      {'title': 'Durga Kavach', 'subtitle': 'Divine protection and resilience...', 'icon': Icons.play_circle_fill},
+      {'title': 'Saraswati Vandana', 'subtitle': 'Invoke wisdom, creativity, focus...', 'icon': Icons.play_circle_fill},
+      {'title': 'Shanti Mantra', 'subtitle': 'Invocation of peace for all...', 'icon': Icons.play_circle_fill},
+      {'title': 'Lakshmi Ashtottara', 'subtitle': 'Prosperity and graceful abundance...', 'icon': Icons.play_circle_fill},
+      {'title': 'Kali Chalisa', 'subtitle': 'Courage to face fears within...', 'icon': Icons.play_circle_fill},
+      {'title': 'Guru Mantra', 'subtitle': 'Honor the teacher within and...', 'icon': Icons.play_circle_fill},
+      {'title': 'Moola Mantra', 'subtitle': 'Sacred sound for grounding and...', 'icon': Icons.play_circle_fill},
     ];
 
     return Column(
@@ -272,44 +282,56 @@ class MantraScreen extends StatelessWidget {
     final playlists = [
       {'title': 'Morning Chants', 'subtitle': '12 Mantras • 45 min'},
       {'title': 'Bedtime Peace', 'subtitle': '8 Mantras • 30 min'},
+      {'title': 'Calm Focus', 'subtitle': '10 Mantras • 28 min'},
+      {'title': 'Deep Sleep Drift', 'subtitle': '9 Mantras • 32 min'},
+      {'title': 'Abundance Vibes', 'subtitle': '11 Mantras • 36 min'},
+      {'title': 'Healing Frequencies', 'subtitle': '7 Mantras • 24 min'},
+      {'title': 'Chakra Balance', 'subtitle': '14 Mantras • 50 min'},
+      {'title': 'Devotional Classics', 'subtitle': '15 Mantras • 55 min'},
+      {'title': 'Kids Calm Chants', 'subtitle': '6 Mantras • 18 min'},
+      {'title': 'Study Flow', 'subtitle': '8 Mantras • 26 min'},
+      {'title': 'Festival Favorites', 'subtitle': '10 Mantras • 40 min'},
+      {'title': 'Gratitude Flow', 'subtitle': '9 Mantras • 30 min'},
     ];
 
-    return Row(
-      children: playlists
-          .map(
-            (p) => Expanded(
-              child: Container(
-                margin: EdgeInsets.only(right: p == playlists.last ? 0 : 12),
-                height: 150,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(16),
-                  boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 12, offset: const Offset(0, 8))],
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    ClipRRect(
-                      borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
-                      child: Image.asset('assets/images/Home page.jpg', height: 95, width: double.infinity, fit: BoxFit.cover),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(10.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(p['title'] as String, style: textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w800, color: Colors.black)),
-                          const SizedBox(height: 4),
-                          Text(p['subtitle'] as String, style: textTheme.bodySmall?.copyWith(color: _muted)),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+    return SizedBox(
+      height: 190,
+      child: ListView.separated(
+        scrollDirection: Axis.horizontal,
+        itemCount: playlists.length,
+        separatorBuilder: (_, __) => const SizedBox(width: 12),
+        itemBuilder: (context, index) {
+          final p = playlists[index];
+          return Container(
+            width: 180,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(16),
+              boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 12, offset: const Offset(0, 8))],
             ),
-          )
-          .toList(),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                ClipRRect(
+                  borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
+                  child: Image.asset('assets/images/Home page.jpg', height: 95, width: double.infinity, fit: BoxFit.cover),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(p['title'] as String, style: textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w800, color: Colors.black)),
+                      const SizedBox(height: 4),
+                      Text(p['subtitle'] as String, style: textTheme.bodySmall?.copyWith(color: _muted)),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          );
+        },
+      ),
     );
   }
 
