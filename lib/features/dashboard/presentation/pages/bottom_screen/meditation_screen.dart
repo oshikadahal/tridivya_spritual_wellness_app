@@ -267,11 +267,23 @@ class MeditationScreen extends StatelessWidget {
   }
 
   Widget _buildInstructors() {
-    final instructors = ['Sarah J.', 'Rahul V.', 'Alex K.', 'Emily G.'];
+    final instructors = [
+      'Sarah J.',
+      'Rahul V.',
+      'Alex K.',
+      'Emily G.',
+      'Nina P.',
+      'Karan S.',
+      'Meera L.',
+      'Omar T.',
+      'Lina D.',
+    ];
     return SizedBox(
       height: 90,
       child: ListView.separated(
+        padding: const EdgeInsets.only(right: 8),
         scrollDirection: Axis.horizontal,
+        physics: const BouncingScrollPhysics(),
         itemCount: instructors.length,
         separatorBuilder: (_, __) => const SizedBox(width: 16),
         itemBuilder: (context, index) {
@@ -313,6 +325,34 @@ class MeditationScreen extends StatelessWidget {
       {
         'title': 'Sleep Better Program',
         'subtitle': '14 days of deep rest techniques',
+      },
+      {
+        'title': 'Stress Reset',
+        'subtitle': 'Daily tools to unwind and reset',
+      },
+      {
+        'title': 'Focus & Flow',
+        'subtitle': 'Sharpen concentration in 10 minutes',
+      },
+      {
+        'title': 'Heartfulness Journey',
+        'subtitle': 'Cultivate gratitude and compassion',
+      },
+      {
+        'title': 'Calm Commute',
+        'subtitle': 'Arrive refreshed and centered',
+      },
+      {
+        'title': 'Mindful Evenings',
+        'subtitle': 'Unwind and prepare for deep rest',
+      },
+      {
+        'title': 'Anxiety Relief Lab',
+        'subtitle': 'Practical drills to ease worry',
+      },
+      {
+        'title': 'Morning Clarity',
+        'subtitle': 'Start the day with clear intent',
       },
     ];
 
