@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tridivya_spritual_wellness_app/features/dashboard/presentation/pages/profile_page.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -19,7 +20,7 @@ class HomeScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              _buildHeader(textTheme),
+              _buildHeader(context, textTheme),
               const SizedBox(height: 20),
               _buildGreeting(textTheme),
               const SizedBox(height: 16),
@@ -40,7 +41,7 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildHeader(TextTheme textTheme) {
+  Widget _buildHeader(BuildContext context, TextTheme textTheme) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -86,10 +87,18 @@ class HomeScreen extends StatelessWidget {
               color: Colors.grey.shade700,
             ),
             const SizedBox(width: 4),
-            CircleAvatar(
-              radius: 18,
-              backgroundColor: Colors.white,
-              child: Icon(Icons.person, color: Colors.grey.shade700),
+            GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => const ProfileScreen()),
+                );
+              },
+              child: CircleAvatar(
+                radius: 18,
+                backgroundColor: Colors.white,
+                child: Icon(Icons.person, color: Colors.grey.shade700),
+              ),
             ),
           ],
         ),
@@ -301,6 +310,24 @@ class HomeScreen extends StatelessWidget {
   }
 
   Widget _buildRecommended(TextTheme textTheme) {
+    const recommendedItems = [
+      {
+        'title': 'Morning Sun Salutation',
+        'subtitle': 'Energizing Yoga Flow',
+        'tag': 'BEGINNER',
+      },
+      {
+        'title': 'Releasing Worries',
+        'subtitle': 'Mindfulness Meditation',
+        'tag': 'INTERMEDIATE',
+      },
+      {
+        'title': 'Mindful Breathing',
+        'subtitle': 'Quick Calm Session',
+        'tag': 'INTERMEDIATE',
+      },
+    ];
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -329,21 +356,14 @@ class HomeScreen extends StatelessWidget {
           height: 280,
           child: ListView.separated(
             scrollDirection: Axis.horizontal,
-            itemCount: 3,
+            itemCount: 9,
             separatorBuilder: (_, __) => const SizedBox(width: 12),
             itemBuilder: (context, index) {
+              final item = recommendedItems[index % recommendedItems.length];
               return _CourseCard(
-                title: index == 0
-                    ? 'Morning Sun Salutation'
-                    : index == 1
-                        ? 'Releasing Worries'
-                        : 'Mindful Breathing',
-                subtitle: index == 0
-                    ? 'Energizing Yoga Flow'
-                    : index == 1
-                        ? 'Mindfulness Meditation'
-                        : 'Quick Calm Session',
-                tag: index == 0 ? 'BEGINNER' : 'INTERMEDIATE',
+                title: item['title']!,
+                subtitle: item['subtitle']!,
+                tag: item['tag']!,
                 accent: _primary,
                 bg: _bg,
               );

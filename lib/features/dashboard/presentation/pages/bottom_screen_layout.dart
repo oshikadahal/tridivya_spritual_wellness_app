@@ -26,28 +26,49 @@ class _BottomScreenLayoutState extends State<BottomScreenLayout> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-     
+      backgroundColor: const Color(0xFFF7F4FF),
       body: lstBottomScreen[_selectedIndex],
-      bottomNavigationBar: BottomNavigationBar(
-        type: BottomNavigationBarType.fixed,
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home_outlined), label: 'Home'),
-          BottomNavigationBarItem(icon: Icon(Icons.spa_outlined), label: 'Meditation'),
-          BottomNavigationBarItem(icon: Icon(Icons.fitness_center_outlined), label: 'Yoga'),
-          BottomNavigationBarItem(icon: Icon(Icons.music_note_outlined), label: 'Mantra'),
-          BottomNavigationBarItem(icon: Icon(Icons.menu_book_outlined), label: 'Library'),
-        ],
-        unselectedItemColor: Colors.grey,
-        selectedItemColor: const Color(0xFF7C4DFF),
-        backgroundColor: Colors.white,
-        currentIndex: _selectedIndex,
-        onTap: (index) {
-          setState(() {
-            _selectedIndex = index;
-          });
-        },
+      bottomNavigationBar: Padding(
+        padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+        child: Container(
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(18),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.06),
+                blurRadius: 12,
+                offset: const Offset(0, 6),
+              ),
+            ],
+          ),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(18),
+            child: BottomNavigationBar(
+              type: BottomNavigationBarType.fixed,
+              backgroundColor: Colors.white,
+              items: const [
+                BottomNavigationBarItem(icon: Icon(Icons.home_outlined), label: 'Home'),
+                BottomNavigationBarItem(icon: Icon(Icons.spa_outlined), label: 'Meditation'),
+                BottomNavigationBarItem(icon: Icon(Icons.fitness_center_outlined), label: 'Yoga'),
+                BottomNavigationBarItem(icon: Icon(Icons.music_note_outlined), label: 'Mantra'),
+                BottomNavigationBarItem(icon: Icon(Icons.menu_book_outlined), label: 'Library'),
+              ],
+              unselectedItemColor: const Color(0xFF9AA3B5),
+              selectedItemColor: const Color(0xFF7C4DFF),
+              currentIndex: _selectedIndex,
+              onTap: (index) {
+                setState(() {
+                  _selectedIndex = index;
+                });
+              },
+              selectedFontSize: 12,
+              unselectedFontSize: 12,
+              elevation: 0,
+            ),
+          ),
+        ),
       ),
-     
     );
   }
 }
