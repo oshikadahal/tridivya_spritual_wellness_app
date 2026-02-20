@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tridivya_spritual_wellness_app/features/dashboard/presentation/pages/profile_page.dart';
 
 class LibraryScreen extends StatefulWidget {
   const LibraryScreen({super.key});
@@ -137,7 +138,16 @@ class _LibraryScreenState extends State<LibraryScreen> {
           children: [
             _circleButton(icon: Icons.search, onTap: () {}),
             const SizedBox(width: 10),
-            _circleButton(icon: Icons.person, onTap: () {}, isAvatar: true),
+            _circleButton(
+              icon: Icons.person,
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => const ProfileScreen()),
+                );
+              },
+              isAvatar: true,
+            ),
           ],
         ),
       ],

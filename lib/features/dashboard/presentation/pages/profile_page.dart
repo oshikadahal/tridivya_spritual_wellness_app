@@ -7,6 +7,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:tridivya_spritual_wellness_app/core/services/storage/user_session_service.dart';
 import 'package:tridivya_spritual_wellness_app/features/auth/presentation/pages/login_page.dart';
 import 'package:tridivya_spritual_wellness_app/features/auth/presentation/view_model/auth_view_model.dart';
+import 'package:tridivya_spritual_wellness_app/features/auth/presentation/pages/change_password_page.dart';
 import 'package:tridivya_spritual_wellness_app/features/dashboard/presentation/pages/bottom_screen_layout.dart';
 import 'package:tridivya_spritual_wellness_app/features/dashboard/presentation/pages/edit_profile_page.dart';
 
@@ -286,7 +287,12 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                 icon: Icons.lock_reset_outlined,
                 primary: primary,
                 muted: muted,
-                onTap: () {},
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (_) => const ChangePasswordPage()),
+                  );
+                },
               ),
               const SizedBox(height: 16),
               _buildLogoutCard(),

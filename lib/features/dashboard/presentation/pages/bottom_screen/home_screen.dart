@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tridivya_spritual_wellness_app/features/dashboard/presentation/pages/practice_detail_page.dart';
 import 'package:tridivya_spritual_wellness_app/features/dashboard/presentation/pages/profile_page.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -366,6 +367,18 @@ class HomeScreen extends StatelessWidget {
                 tag: item['tag']!,
                 accent: _primary,
                 bg: _bg,
+                onStart: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => PracticeDetailPage(
+                        title: item['title']!,
+                        subtitle: item['subtitle']!,
+                        tag: item['tag']!,
+                      ),
+                    ),
+                  );
+                },
               );
             },
           ),
@@ -560,6 +573,7 @@ class _CourseCard extends StatelessWidget {
   final String tag;
   final Color accent;
   final Color bg;
+  final VoidCallback onStart;
 
   const _CourseCard({
     required this.title,
@@ -567,6 +581,7 @@ class _CourseCard extends StatelessWidget {
     required this.tag,
     required this.accent,
     required this.bg,
+    required this.onStart,
   });
 
   @override
@@ -651,7 +666,7 @@ class _CourseCard extends StatelessWidget {
                         borderRadius: BorderRadius.circular(10),
                       ),
                     ),
-                    onPressed: () {},
+                      onPressed: onStart,
                     child: Text(
                       'Start Practice',
                       style: textTheme.bodyMedium?.copyWith(
