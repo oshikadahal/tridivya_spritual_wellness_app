@@ -2,16 +2,16 @@ import 'package:chewie/chewie.dart';
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 
-class PracticeDetailPage extends StatefulWidget {
+class MeditationDetailPage extends StatefulWidget {
   final String title;
   final String subtitle;
   final String tag;
   final List<String>? aboutParagraphs;
   final List<Map<String, dynamic>>? focusAreas;
   final List<Map<String, dynamic>>? needs;
-  final List<Map<String, dynamic>>? structure;
+  final List<Map<String, dynamic>>? flow;
 
-  const PracticeDetailPage({
+  const MeditationDetailPage({
     super.key,
     required this.title,
     required this.subtitle,
@@ -19,14 +19,14 @@ class PracticeDetailPage extends StatefulWidget {
     this.aboutParagraphs,
     this.focusAreas,
     this.needs,
-    this.structure,
+    this.flow,
   });
 
   @override
-  State<PracticeDetailPage> createState() => _PracticeDetailPageState();
+  State<MeditationDetailPage> createState() => _MeditationDetailPageState();
 }
 
-class _PracticeDetailPageState extends State<PracticeDetailPage> {
+class _MeditationDetailPageState extends State<MeditationDetailPage> {
   late final VideoPlayerController _videoController;
   ChewieController? _chewieController;
   bool _isReady = false;
@@ -40,6 +40,19 @@ class _PracticeDetailPageState extends State<PracticeDetailPage> {
   void initState() {
     super.initState();
     _initializePlayer();
+  }
+
+  Widget _buildSectionTitle(String title, TextTheme textTheme) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(
+          title,
+          style: textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w800, color: Colors.grey.shade900),
+        ),
+        const SizedBox.shrink(),
+      ],
+    );
   }
 
   Future<void> _initializePlayer() async {
@@ -68,7 +81,7 @@ class _PracticeDetailPageState extends State<PracticeDetailPage> {
       });
     } catch (e) {
       setState(() {
-        _error = 'Unable to load the practice video. Please try again.';
+        _error = 'Unable to load the meditation video. Please try again.';
       });
     }
   }
@@ -91,7 +104,7 @@ class _PracticeDetailPageState extends State<PracticeDetailPage> {
         backgroundColor: _bg,
         iconTheme: const IconThemeData(color: Colors.black),
         title: Text(
-          'Practice Details',
+          'Meditation Session',
           style: textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w700, color: Colors.black),
         ),
         actions: [
@@ -106,10 +119,10 @@ class _PracticeDetailPageState extends State<PracticeDetailPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _buildVideoPlayer(textTheme),
+            _buildVideo(textTheme),
             const SizedBox(height: 16),
             _buildHeader(textTheme),
-            const SizedBox(height: 14),
+            const SizedBox(height: 12),
             _buildMeta(textTheme),
             const SizedBox(height: 12),
             _buildFocusChips(textTheme),
@@ -119,22 +132,22 @@ class _PracticeDetailPageState extends State<PracticeDetailPage> {
             _buildSectionTitle('Quick controls', textTheme),
             const SizedBox(height: 10),
             _buildSpeedControls(textTheme),
-            const SizedBox(height: 24),
-            _buildSectionTitle('About this Practice', textTheme),
+            const SizedBox(height: 22),
+            _buildSectionTitle('About this meditation', textTheme),
             const SizedBox(height: 10),
             _buildAbout(textTheme),
-            const SizedBox(height: 24),
+            const SizedBox(height: 22),
             _buildSectionTitle('What you need', textTheme),
             const SizedBox(height: 12),
             _buildNeeds(textTheme),
-            const SizedBox(height: 26),
-            _buildSectionTitle('Practice Structure', textTheme),
+            const SizedBox(height: 22),
+            _buildSectionTitle('Session flow', textTheme),
             const SizedBox(height: 12),
-            _buildStructure(textTheme),
-            const SizedBox(height: 26),
-            _buildSectionTitle('Reviews', textTheme),
-            const SizedBox(height: 12),
-            _buildReviews(textTheme),
+            _buildFlow(textTheme),
+            const SizedBox(height: 22),
+            _buildSectionTitle('Benefits', textTheme),
+            const SizedBox(height: 10),
+            _buildBenefits(textTheme),
             const SizedBox(height: 28),
           ],
         ),
@@ -142,7 +155,7 @@ class _PracticeDetailPageState extends State<PracticeDetailPage> {
     );
   }
 
-  Widget _buildVideoPlayer(TextTheme textTheme) {
+  Widget _buildVideo(TextTheme textTheme) {
     if (_error != null) {
       return Container(
         height: 220,
@@ -234,15 +247,61 @@ class _PracticeDetailPageState extends State<PracticeDetailPage> {
 
   Widget _buildMeta(TextTheme textTheme) {
     final chips = [
-      _MetaChip(icon: Icons.schedule, label: '20 mins'),
-      _MetaChip(icon: Icons.spa_outlined, label: widget.tag),
-      const _MetaChip(icon: Icons.self_improvement, label: 'Breath + Flow'),
+      _MetaChip(icon: Icons.schedule, label: '12 mins'),
+      _MetaChip(icon: Icons.headphones, label: 'Guided'),
+      const _MetaChip(icon: Icons.self_improvement, label: 'Mindfulness'),
     ];
 
     return Wrap(
       spacing: 10,
       runSpacing: 10,
       children: chips,
+    );
+  }
+
+  Widget _buildFocusChips(TextTheme textTheme) {
+    final focus = widget.focusAreas ?? [
+      {'icon': Icons.waves, 'label': 'Calm'},
+      {'icon': Icons.bolt, 'label': 'Focus'},
+      {'icon': Icons.air, 'label': 'Breath'},
+    ];
+
+    return Wrap(
+      spacing: 12,
+      runSpacing: 10,
+      children: focus
+          .map(
+            (item) => Container(
+              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(14),
+                border: Border.all(color: Colors.grey.shade200),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.02),
+                    blurRadius: 6,
+                    offset: const Offset(0, 4),
+                  ),
+                ],
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(item['icon'] as IconData, color: _primary, size: 18),
+                  const SizedBox(width: 8),
+                  Text(
+                    item['label'] as String,
+                    style: textTheme.bodyMedium?.copyWith(
+                      fontWeight: FontWeight.w700,
+                      color: Colors.grey.shade800,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          )
+          .toList(),
     );
   }
 
@@ -323,45 +382,31 @@ class _PracticeDetailPageState extends State<PracticeDetailPage> {
     );
   }
 
-  Widget _buildFocusChips(TextTheme textTheme) {
-    final focus = widget.focusAreas ?? [
-      {'icon': Icons.self_improvement, 'label': 'Balance'},
-      {'icon': Icons.spa, 'label': 'Flexibility'},
-      {'icon': Icons.air, 'label': 'Breathing'},
-    ];
+  Widget _buildSpeedControls(TextTheme textTheme) {
+    const speeds = [0.75, 1.0, 1.25, 1.5, 2.0];
 
     return Wrap(
-      spacing: 12,
+      spacing: 10,
       runSpacing: 10,
-      children: focus
+      children: speeds
           .map(
-            (item) => Container(
-              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(14),
-                border: Border.all(color: Colors.grey.shade200),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.02),
-                    blurRadius: 6,
-                    offset: const Offset(0, 4),
-                  ),
-                ],
-              ),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Icon(item['icon'] as IconData, color: _primary, size: 18),
-                  const SizedBox(width: 8),
-                  Text(
-                    item['label'] as String,
-                    style: textTheme.bodyMedium?.copyWith(
-                      fontWeight: FontWeight.w700,
-                      color: Colors.grey.shade800,
-                    ),
-                  ),
-                ],
+            (speed) => ChoiceChip(
+              label: Text('${speed.toStringAsFixed(speed == speed.toInt() ? 0 : 2)}x'),
+              selected: _currentSpeed == speed,
+              onSelected: _isReady
+                  ? (selected) {
+                      if (selected) {
+                        _videoController.setPlaybackSpeed(speed);
+                        setState(() {
+                          _currentSpeed = speed;
+                        });
+                      }
+                    }
+                  : null,
+              selectedColor: _primary.withOpacity(0.12),
+              labelStyle: textTheme.bodyMedium?.copyWith(
+                color: _currentSpeed == speed ? _primary : Colors.grey.shade800,
+                fontWeight: FontWeight.w700,
               ),
             ),
           )
@@ -371,8 +416,9 @@ class _PracticeDetailPageState extends State<PracticeDetailPage> {
 
   Widget _buildAbout(TextTheme textTheme) {
     final about = widget.aboutParagraphs ?? [
-      'Awaken your body and mind with this comprehensive Surya Namaskar sequence. Designed to harness the energy of the morning sun, this session focuses on rhythmic movement synchronized with deep yogic breathing.',
-      'Perfect for those looking to improve flexibility, boost circulation, and set a positive intention for the day ahead. No prior experience required.',
+      'Settle into a calm, guided practice that blends mindful breathing with gentle awareness cues to clear morning fog and reduce anxious thoughts.',
+      'Instructor Rahul leads you through steady breath pacing, body scanning, and visualization so you can start the day grounded and focused.',
+      'Perfect when you need a quick reset before work, after a busy commute, or anytime you want to recharge without movement.',
     ];
 
     return Column(
@@ -393,8 +439,8 @@ class _PracticeDetailPageState extends State<PracticeDetailPage> {
 
   Widget _buildNeeds(TextTheme textTheme) {
     final needs = widget.needs ?? [
-      {'label': 'Yoga Mat', 'icon': Icons.stairs_outlined},
-      {'label': 'Water Bottle', 'icon': Icons.local_drink_outlined},
+      {'label': 'Headphones', 'icon': Icons.headphones},
+      {'label': 'Quiet space', 'icon': Icons.nightlight_round},
     ];
 
     return Row(
@@ -442,12 +488,12 @@ class _PracticeDetailPageState extends State<PracticeDetailPage> {
     );
   }
 
-  Widget _buildStructure(TextTheme textTheme) {
-    final steps = widget.structure ?? [
-      {'title': 'Centering', 'time': '3 mins'},
-      {'title': 'Warm-up', 'time': '5 mins'},
-      {'title': 'Main Flow', 'time': '10 mins'},
-      {'title': 'Savasana', 'time': '2 mins'},
+  Widget _buildFlow(TextTheme textTheme) {
+    final steps = widget.flow ?? [
+      {'title': 'Arrival & breath count', 'time': '2 mins'},
+      {'title': 'Body scan & tension release', 'time': '4 mins'},
+      {'title': 'Visualization for clarity', 'time': '4 mins'},
+      {'title': 'Closing affirmation', 'time': '2 mins'},
     ];
 
     return Column(
@@ -496,118 +542,12 @@ class _PracticeDetailPageState extends State<PracticeDetailPage> {
     );
   }
 
-  Widget _buildReviews(TextTheme textTheme) {
-    final reviews = [
-      {
-        'name': 'Sarah Jenkins',
-        'role': 'Morning practitioner',
-        'comment': 'The pacing was absolutely perfect for my morning routine. I feel energized and ready to tackle the day!',
-        'rating': 5,
-      },
-      {
-        'name': 'Mark Rivera',
-        'role': 'Beginner yogi',
-        'comment': 'Excellent cues. As a beginner, I found it very easy to follow without constantly looking at the screen.',
-        'rating': 5,
-      },
-    ];
-
-    return Column(
-      children: [
-        Align(
-          alignment: Alignment.centerRight,
-          child: Text(
-            'Write Review',
-            style: textTheme.bodyMedium?.copyWith(color: _primary, fontWeight: FontWeight.w700),
-          ),
-        ),
-        const SizedBox(height: 10),
-        ...reviews.map(
-          (r) => Container(
-            width: double.infinity,
-            margin: const EdgeInsets.only(bottom: 12),
-            padding: const EdgeInsets.all(14),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(16),
-              border: Border.all(color: Colors.grey.shade200),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.02),
-                  blurRadius: 8,
-                  offset: const Offset(0, 6),
-                ),
-              ],
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  children: [
-                    CircleAvatar(
-                      radius: 16,
-                      backgroundColor: _primary.withOpacity(0.12),
-                      child: Text(
-                        (r['name'] as String).split(' ').map((p) => p.isNotEmpty ? p[0] : '').take(2).join(),
-                        style: textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w700, color: _primary),
-                      ),
-                    ),
-                    const SizedBox(width: 10),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          r['name'] as String,
-                          style: textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w700, color: Colors.grey.shade900),
-                        ),
-                        Text(
-                          r['role'] as String,
-                          style: textTheme.bodySmall?.copyWith(color: Colors.grey.shade600),
-                        ),
-                      ],
-                    ),
-                    const Spacer(),
-                    _buildStars(r['rating'] as int),
-                  ],
-                ),
-                const SizedBox(height: 10),
-                Text(
-                  r['comment'] as String,
-                  style: textTheme.bodyMedium?.copyWith(color: Colors.grey.shade800, height: 1.4),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildStars(int count) {
-    return Row(
-      children: List.generate(
-        count,
-        (index) => const Icon(Icons.star, color: Colors.amber, size: 16),
-      ),
-    );
-  }
-
-  Widget _buildSectionTitle(String title, TextTheme textTheme) {
-    return Text(
-      title,
-      style: textTheme.titleMedium?.copyWith(
-        fontWeight: FontWeight.w800,
-        color: Colors.black,
-      ),
-    );
-  }
-
-  Widget _buildChecklist(TextTheme textTheme) {
+  Widget _buildBenefits(TextTheme textTheme) {
     final points = [
-      'Grounding breathwork to settle the mind',
-      'Gentle warm-up to wake up the spine',
-      'Guided sun salutation flow with cues',
-      'Closing meditation for clarity and focus',
+      'Reduces morning anxiety and racing thoughts',
+      'Improves focus and decision-making clarity',
+      'Eases physical tension through paced breathing',
+      'Creates a calm baseline for the rest of the day',
     ];
 
     return Column(
@@ -633,38 +573,6 @@ class _PracticeDetailPageState extends State<PracticeDetailPage> {
                     ),
                   ),
                 ],
-              ),
-            ),
-          )
-          .toList(),
-    );
-  }
-
-  Widget _buildSpeedControls(TextTheme textTheme) {
-    const speeds = [0.75, 1.0, 1.25, 1.5, 2.0];
-
-    return Wrap(
-      spacing: 10,
-      runSpacing: 10,
-      children: speeds
-          .map(
-            (speed) => ChoiceChip(
-              label: Text('${speed.toStringAsFixed(speed == speed.toInt() ? 0 : 2)}x'),
-              selected: _currentSpeed == speed,
-              onSelected: _isReady
-                  ? (selected) {
-                      if (selected) {
-                        _videoController.setPlaybackSpeed(speed);
-                        setState(() {
-                          _currentSpeed = speed;
-                        });
-                      }
-                    }
-                  : null,
-              selectedColor: _primary.withOpacity(0.12),
-              labelStyle: textTheme.bodyMedium?.copyWith(
-                color: _currentSpeed == speed ? _primary : Colors.grey.shade800,
-                fontWeight: FontWeight.w700,
               ),
             ),
           )

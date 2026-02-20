@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tridivya_spritual_wellness_app/features/dashboard/presentation/pages/profile_page.dart';
+import 'package:tridivya_spritual_wellness_app/features/dashboard/presentation/pages/meditation_detail_page.dart';
 
 class MeditationScreen extends StatelessWidget {
   const MeditationScreen({super.key});
@@ -26,7 +27,7 @@ class MeditationScreen extends StatelessWidget {
               const SizedBox(height: 16),
               _buildSectionTitle('Featured Selection', textTheme),
               const SizedBox(height: 10),
-              _buildFeaturedCard(textTheme),
+              _buildFeaturedCard(context, textTheme),
               const SizedBox(height: 20),
               _buildSectionTitle('Recently Added', textTheme, trailing: 'See All'),
               const SizedBox(height: 12),
@@ -147,7 +148,7 @@ class MeditationScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildFeaturedCard(TextTheme textTheme) {
+  Widget _buildFeaturedCard(BuildContext context, TextTheme textTheme) {
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
@@ -213,7 +214,18 @@ class MeditationScreen extends StatelessWidget {
                       padding: const EdgeInsets.symmetric(vertical: 14),
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
                     ),
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.push(
+                      context,
+                        MaterialPageRoute(
+                          builder: (_) => MeditationDetailPage(
+                            title: 'Morning Clarity with Rahul',
+                            subtitle: 'Guided Meditation • 12 mins',
+                            tag: 'Calm',
+                          ),
+                        ),
+                      );
+                    },
                     icon: const Icon(Icons.play_arrow_rounded, color: Colors.white),
                     label: Text(
                       'Start Session',
