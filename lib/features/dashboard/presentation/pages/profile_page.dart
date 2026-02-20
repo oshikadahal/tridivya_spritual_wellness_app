@@ -8,6 +8,7 @@ import 'package:tridivya_spritual_wellness_app/core/services/storage/user_sessio
 import 'package:tridivya_spritual_wellness_app/features/auth/presentation/pages/login_page.dart';
 import 'package:tridivya_spritual_wellness_app/features/auth/presentation/view_model/auth_view_model.dart';
 import 'package:tridivya_spritual_wellness_app/features/dashboard/presentation/pages/bottom_screen_layout.dart';
+import 'package:tridivya_spritual_wellness_app/features/dashboard/presentation/pages/edit_profile_page.dart';
 
 class ProfileScreen extends ConsumerStatefulWidget {
   const ProfileScreen({super.key});
@@ -43,30 +44,94 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
   void _showLogoutDialog(BuildContext context) {
     showDialog(
       context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Logout'),
-        content: const Text('Are you sure you want to logout?'),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(),
-            child: const Text('Cancel'),
+      barrierDismissible: true,
+      builder: (dialogCtx) {
+        return Dialog(
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(20, 20, 20, 16),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Stack(
+                  children: [
+                    Align(
+                      alignment: Alignment.center,
+                      child: Container(
+                        height: 68,
+                        width: 68,
+                        decoration: BoxDecoration(
+                          color: const Color(0xFFFFE8E8),
+                          shape: BoxShape.circle,
+                        ),
+                        child: const Icon(Icons.error_outline, color: Colors.red, size: 38),
+                      ),
+                    ),
+                    Align(
+                      alignment: Alignment.topRight,
+                      child: IconButton(
+                        icon: const Icon(Icons.close, color: Colors.grey),
+                        onPressed: () => Navigator.of(dialogCtx).pop(),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 16),
+                const Text(
+                  'Are you sure you want to log out?',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  'You will be logged out of your account.',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(color: Colors.grey.shade600, fontSize: 14),
+                ),
+                const SizedBox(height: 22),
+                Row(
+                  children: [
+                    Expanded(
+                      child: OutlinedButton(
+                        style: OutlinedButton.styleFrom(
+                          padding: const EdgeInsets.symmetric(vertical: 14),
+                          side: const BorderSide(color: Color(0xFFCBD2D9)),
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                        ),
+                        onPressed: () => Navigator.of(dialogCtx).pop(),
+                        child: const Text('Cancel', style: TextStyle(color: Color(0xFF4B5563), fontSize: 16, fontWeight: FontWeight.w600)),
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          padding: const EdgeInsets.symmetric(vertical: 14),
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                          backgroundColor: const Color(0xFFFF4D4F),
+                          elevation: 0,
+                        ),
+                        onPressed: () async {
+                          Navigator.of(dialogCtx).pop();
+                          await ref.read(authViewModelProvider.notifier).logout();
+                          await ref.read(userSessionServiceProvider).clearUserSession();
+                          if (mounted) {
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(builder: (_) => const LoginPage()),
+                            );
+                          }
+                        },
+                        child: const Text('Log Out', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: Colors.white)),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
           ),
-          TextButton(
-            onPressed: () async {
-              Navigator.of(context).pop();
-              await ref.read(authViewModelProvider.notifier).logout();
-              await ref.read(userSessionServiceProvider).clearUserSession();
-              if (mounted) {
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(builder: (_) => const LoginPage()),
-                );
-              }
-            },
-            child: const Text('Logout', style: TextStyle(color: Colors.red)),
-          ),
-        ],
-      ),
+        );
+      },
     );
   }
 
@@ -337,17 +402,25 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
           const SizedBox(height: 14),
           SizedBox(
             width: double.infinity,
-            child: ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: primary,
-                foregroundColor: Colors.white,
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
-                padding: const EdgeInsets.symmetric(vertical: 14),
-                elevation: 0,
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: primary,
+                  foregroundColor: Colors.white,
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+                  padding: const EdgeInsets.symmetric(vertical: 14),
+                  elevation: 0,
+                ),
+                onPressed: () async {
+                  final updated = await Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (_) => const EditProfilePage()),
+                  );
+                  if (updated == true && mounted) {
+                    _loadUserData();
+                  }
+                },
+                child: const Text('Edit Profile', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700)),
               ),
-              onPressed: () {},
-              child: const Text('Edit Profile', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700)),
-            ),
           ),
         ],
       ),

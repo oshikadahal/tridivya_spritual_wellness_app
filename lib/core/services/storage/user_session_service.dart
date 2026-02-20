@@ -78,6 +78,22 @@ class UserSessionService {
     await _prefs.setString(_keyUserProfilePicture, profilePicture);
   }
 
+  Future<void> updateFullName(String fullName) async {
+    await _prefs.setString(_keyUserFullName, fullName);
+  }
+
+  Future<void> updateEmail(String email) async {
+    await _prefs.setString(_keyUserEmail, email);
+    // Keep username in sync when derived from email if username not explicitly set
+    if (getCurrentUserUsername() == null || getCurrentUserUsername()!.isEmpty) {
+      await updateUsername('@${email.split('@').first}');
+    }
+  }
+
+  Future<void> updateUsername(String username) async {
+    await _prefs.setString(_keyUserUsername, username);
+  }
+
   // Clear user session (logout)
   Future<void> clearSession() async {
     await _prefs.remove(_keyIsLoggedIn);
