@@ -1,10 +1,13 @@
-import 'package:flutter/material.dart';
 import 'dart:io';
-import 'package:image_picker/image_picker.dart';
+
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:tridivya_spritual_wellness_app/features/auth/presentation/view_model/auth_view_model.dart';
-import 'package:tridivya_spritual_wellness_app/features/auth/presentation/pages/login_page.dart';
+import 'package:image_picker/image_picker.dart';
+
 import 'package:tridivya_spritual_wellness_app/core/services/storage/user_session_service.dart';
+import 'package:tridivya_spritual_wellness_app/features/auth/presentation/pages/login_page.dart';
+import 'package:tridivya_spritual_wellness_app/features/auth/presentation/view_model/auth_view_model.dart';
+import 'package:tridivya_spritual_wellness_app/features/dashboard/presentation/pages/bottom_screen_layout.dart';
 
 class ProfileScreen extends ConsumerStatefulWidget {
   const ProfileScreen({super.key});
@@ -19,6 +22,8 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
   String? userName;
   String? userEmail;
   String? userProfilePicture;
+  final List<String> _sessionTabs = ['Yoga', 'Meditation', 'Mantra', 'Pranayama'];
+  int _selectedSessionTab = 0;
 
   @override
   void initState() {
@@ -49,14 +54,8 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
           TextButton(
             onPressed: () async {
               Navigator.of(context).pop();
-              
-              // Logout
               await ref.read(authViewModelProvider.notifier).logout();
-              
-              // Clear session
               await ref.read(userSessionServiceProvider).clearUserSession();
-              
-              // Navigate to login page
               if (mounted) {
                 Navigator.pushReplacement(
                   context,
@@ -64,10 +63,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                 );
               }
             },
-            child: const Text(
-              'Logout',
-              style: TextStyle(color: Colors.red),
-            ),
+            child: const Text('Logout', style: TextStyle(color: Colors.red)),
           ),
         ],
       ),
@@ -76,15 +72,9 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
 
   Future<void> _uploadProfileImage(File image) async {
     try {
-      final uploadedPath = await ref
-          .read(authViewModelProvider.notifier)
-          .updateProfileImage(image);
-
+      final uploadedPath = await ref.read(authViewModelProvider.notifier).updateProfileImage(image);
       if (uploadedPath != null && mounted) {
-        await ref
-            .read(userSessionServiceProvider)
-            .updateProfilePicture(uploadedPath);
-        
+        await ref.read(userSessionServiceProvider).updateProfilePicture(uploadedPath);
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(content: Text('Profile image updated successfully!')),
@@ -102,8 +92,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
 
   Future<void> _pickImageFromGallery() async {
     try {
-      final XFile? pickedFile =
-          await _imagePicker.pickImage(source: ImageSource.gallery);
+      final XFile? pickedFile = await _imagePicker.pickImage(source: ImageSource.gallery);
       if (pickedFile != null) {
         setState(() {
           _profileImage = File(pickedFile.path);
@@ -121,8 +110,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
 
   Future<void> _pickImageFromCamera() async {
     try {
-      final XFile? pickedFile =
-          await _imagePicker.pickImage(source: ImageSource.camera);
+      final XFile? pickedFile = await _imagePicker.pickImage(source: ImageSource.camera);
       if (pickedFile != null) {
         setState(() {
           _profileImage = File(pickedFile.path);
@@ -200,300 +188,485 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
+    const primary = Color(0xFF7C4DFF);
+    const muted = Color(0xFF6E6B7B);
+
     return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0,
-        title: const Text(
-          'Profile',
-          style: TextStyle(
-            color: Colors.black,
-            fontSize: 24,
-            fontWeight: FontWeight.bold,
+      backgroundColor: const Color(0xFFF6F3FF),
+      bottomNavigationBar: _buildBottomNav(context, primary),
+      body: SafeArea(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _buildHeader(primary),
+              const SizedBox(height: 16),
+              _buildProfileCard(primary, muted),
+              const SizedBox(height: 24),
+              _buildSectionTitle('Account Details'),
+              const SizedBox(height: 14),
+              _buildAccountDetailsCard(muted),
+              const SizedBox(height: 26),
+              _buildSectionTitle('My Saved Sessions', trailing: 'View All'),
+              const SizedBox(height: 12),
+              _buildSessionTabs(primary, muted),
+              const SizedBox(height: 14),
+              _buildSavedSessions(primary, muted),
+              const SizedBox(height: 28),
+              _buildSectionTitle('Security Settings'),
+              const SizedBox(height: 14),
+              _buildSecurityCard(
+                title: 'Change Password',
+                icon: Icons.lock_reset_outlined,
+                primary: primary,
+                muted: muted,
+                onTap: () {},
+              ),
+              const SizedBox(height: 16),
+              _buildLogoutCard(),
+              const SizedBox(height: 24),
+            ],
           ),
         ),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.black),
-          onPressed: () => Navigator.of(context).pop(),
+      ),
+    );
+  }
+
+  Widget _buildHeader(Color primary) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        IconButton(
+          icon: const Icon(Icons.arrow_back_ios_new_rounded, color: Colors.black87),
+          onPressed: () => Navigator.of(context).maybePop(),
         ),
-        actions: [
-          PopupMenuButton(
-            icon: const Icon(Icons.settings_outlined, color: Colors.black),
-            itemBuilder: (BuildContext context) => [
-              PopupMenuItem(
-                child: const Text('Logout'),
-                onTap: () {
-                  Future.delayed(Duration.zero, () {
-                    _showLogoutDialog(context);
-                  });
-                },
-              ),
-            ],
+        Text(
+          'Tridivya',
+          style: TextStyle(
+            fontSize: 24,
+            fontWeight: FontWeight.w800,
+            color: primary,
+          ),
+        ),
+        IconButton(
+          icon: const Icon(Icons.settings_outlined, size: 26, color: Colors.black87),
+          onPressed: () {},
+        ),
+      ],
+    );
+  }
+
+  Widget _buildProfileCard(Color primary, Color muted) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(18),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(22),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.06),
+            blurRadius: 14,
+            offset: const Offset(0, 8),
           ),
         ],
       ),
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // Profile Image and User Info
-                Center(
-                  child: Column(
-                    children: [
-                      GestureDetector(
-                        onTap: _showImagePickerBottomSheet,
-                        child: Stack(
-                          alignment: Alignment.bottomRight,
-                          children: [
-                            Container(
-                              width: 100,
-                              height: 100,
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: const Color(0xFFFFE4D6),
-                                image: _profileImage != null
-                                    ? DecorationImage(
-                                        image: FileImage(_profileImage!),
-                                        fit: BoxFit.cover,
-                                      )
-                                    : const DecorationImage(
-                                        image: AssetImage(
-                                            'assets/images/profile_avatar.png'),
-                                        fit: BoxFit.cover,
-                                      ),
-                              ),
-                            ),
-                            Container(
-                              width: 36,
-                              height: 36,
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: Colors.blue,
-                                border: Border.all(
-                                  color: Colors.white,
-                                  width: 2,
-                                ),
-                              ),
-                              child: const Icon(
-                                Icons.camera_alt,
-                                color: Colors.white,
-                                size: 18,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      const SizedBox(height: 16),
-                      Text(
-                        userName ?? 'Guest User',
-                        style: const TextStyle(
-                          fontSize: 22,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      const SizedBox(height: 8),
-                      Text(
-                        userEmail ?? 'Embrace the present, find your peace',
-                        style: const TextStyle(
-                          fontSize: 14,
-                          color: Colors.grey,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 30),
-
-                // My Journey Section
-                const Text(
-                  'My Journey',
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                const SizedBox(height: 16),
-                Row(
+      child: Column(
+        children: [
+          Row(
+            children: [
+              GestureDetector(
+                onTap: _showImagePickerBottomSheet,
+                child: Stack(
+                  alignment: Alignment.bottomRight,
                   children: [
-                    Expanded(
-                      child: _buildJourneyCard('15', 'Sessions\nCompleted'),
+                    CircleAvatar(
+                      radius: 36,
+                      backgroundColor: const Color(0xFFEFE7FF),
+                      backgroundImage: _profileImage != null
+                          ? FileImage(_profileImage!)
+                          : (userProfilePicture != null
+                              ? NetworkImage(userProfilePicture!) as ImageProvider
+                              : const AssetImage('assets/images/onboarding.png')),
                     ),
-                    const SizedBox(width: 12),
-                    Expanded(
-                      child: _buildJourneyCard('30', 'Hours\nMeditated'),
+                    Container(
+                      height: 24,
+                      width: 24,
+                      decoration: BoxDecoration(
+                        color: primary,
+                        shape: BoxShape.circle,
+                        border: Border.all(color: Colors.white, width: 2),
+                      ),
+                      child: const Icon(Icons.camera_alt, size: 12, color: Colors.white),
                     ),
                   ],
                 ),
-                const SizedBox(height: 12),
-                _buildJourneyCard('10', 'Mantras Practiced'),
-                const SizedBox(height: 30),
-
-                // Saved Sessions Section
-                const Text(
-                  'Saved Sessions',
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                const SizedBox(height: 16),
-                SizedBox(
-                  height: 180,
-                  child: ListView(
-                    scrollDirection: Axis.horizontal,
-                    children: [
-                      _buildSavedSessionCard(
-                        'Morning Yoga Flow',
-                        'assets/images/yoga_session.png',
-                        const Color(0xFFB8D4D4),
+              ),
+              const SizedBox(width: 14),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      userName ?? 'Guest User',
+                      style: const TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w800,
+                        color: Colors.black,
                       ),
-                      const SizedBox(width: 12),
-                      _buildSavedSessionCard(
-                        'Mindfulness Meditation',
-                        'assets/images/meditation_session.png',
-                        const Color(0xFFD4E4E4),
-                      ),
-                      const SizedBox(width: 12),
-                      _buildSavedSessionCard(
-                        'Gratitude Practice',
-                        'assets/images/gratitude_session.png',
-                        const Color(0xFFFFE4D6),
-                      ),
-                    ],
-                  ),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      userEmail?.isNotEmpty == true ? '@${userEmail?.split('@').first}' : '@manisha12',
+                      style: TextStyle(color: muted, fontSize: 13),
+                    ),
+                  ],
                 ),
-                const SizedBox(height: 30),
-
-                // Personal Preferences Section
-                const Text(
-                  'Personal Preferences',
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
+              ),
+              Container(
+                height: 14,
+                width: 14,
+                decoration: const BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: Color(0xFF1CC88A),
                 ),
-                const SizedBox(height: 16),
-                _buildPreferenceItem(
-                  'App Settings',
-                  Icons.chevron_right,
-                  () {
-                    // Navigate to app settings
-                  },
-                ),
-                const SizedBox(height: 12),
-                _buildPreferenceItem(
-                  'Edit Profile',
-                  Icons.chevron_right,
-                  () {
-                    // Navigate to edit profile
-                  },
-                ),
-                const SizedBox(height: 20),
-              ],
+              ),
+            ],
+          ),
+          const SizedBox(height: 14),
+          SizedBox(
+            width: double.infinity,
+            child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: primary,
+                foregroundColor: Colors.white,
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+                padding: const EdgeInsets.symmetric(vertical: 14),
+                elevation: 0,
+              ),
+              onPressed: () {},
+              child: const Text('Edit Profile', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700)),
             ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildBottomNav(BuildContext context, Color primary) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+      child: Container(
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(18),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.06),
+              blurRadius: 12,
+              offset: const Offset(0, 6),
+            ),
+          ],
+        ),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(18),
+          child: BottomNavigationBar(
+            type: BottomNavigationBarType.fixed,
+            backgroundColor: Colors.white,
+            currentIndex: 0,
+            onTap: (index) {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => BottomScreenLayout(initialIndex: index),
+                ),
+              );
+            },
+            items: const [
+              BottomNavigationBarItem(icon: Icon(Icons.home_outlined), label: 'Home'),
+              BottomNavigationBarItem(icon: Icon(Icons.spa_outlined), label: 'Meditation'),
+              BottomNavigationBarItem(icon: Icon(Icons.fitness_center_outlined), label: 'Yoga'),
+              BottomNavigationBarItem(icon: Icon(Icons.music_note_outlined), label: 'Mantra'),
+              BottomNavigationBarItem(icon: Icon(Icons.menu_book_outlined), label: 'Library'),
+            ],
+            unselectedItemColor: const Color(0xFF9AA3B5),
+            selectedItemColor: primary,
+            selectedFontSize: 12,
+            unselectedFontSize: 12,
+            elevation: 0,
           ),
         ),
       ),
     );
   }
 
-  Widget _buildJourneyCard(String value, String label) {
+  Widget _buildSectionTitle(String title, {String? trailing}) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(
+          title,
+          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w800, color: Colors.black),
+        ),
+        if (trailing != null)
+          Text(
+            trailing,
+            style: const TextStyle(color: Color(0xFF7C4DFF), fontWeight: FontWeight.w700),
+          ),
+      ],
+    );
+  }
+
+  Widget _buildAccountDetailsCard(Color muted) {
     return Container(
-      padding: const EdgeInsets.all(20),
+      padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: const Color(0xFFF8F9FA),
-        borderRadius: BorderRadius.circular(16),
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(18),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.04),
+            blurRadius: 12,
+            offset: const Offset(0, 8),
+          ),
+        ],
       ),
       child: Column(
         children: [
-          Text(
+          Row(
+            children: [
+              Expanded(child: _buildReadonlyField('First Name', (userName ?? 'Manisha').split(' ').first, muted)),
+              const SizedBox(width: 12),
+              Expanded(child: _buildReadonlyField('Last Name', (userName ?? 'Sapkota').split(' ').skip(1).join(' '), muted)),
+            ],
+          ),
+          const SizedBox(height: 12),
+          _buildReadonlyField('Email', userEmail ?? 'manisha12@gmail.com', muted),
+          const SizedBox(height: 12),
+          _buildReadonlyField('Username', userEmail?.isNotEmpty == true ? '@${userEmail?.split('@').first}' : '@manisha12', muted),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildReadonlyField(String label, String value, Color muted) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(label, style: TextStyle(color: muted, fontSize: 13, fontWeight: FontWeight.w600)),
+        const SizedBox(height: 6),
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
+          decoration: BoxDecoration(
+            color: const Color(0xFFF7F7FB),
+            borderRadius: BorderRadius.circular(12),
+          ),
+          width: double.infinity,
+          child: Text(
             value,
-            style: const TextStyle(
-              fontSize: 28,
-              fontWeight: FontWeight.bold,
-            ),
+            style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w600, color: Colors.black),
           ),
-          const SizedBox(height: 8),
-          Text(
-            label,
-            textAlign: TextAlign.center,
-            style: const TextStyle(
-              fontSize: 13,
-              color: Colors.grey,
-            ),
-          ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 
-  Widget _buildSavedSessionCard(String title, String imagePath, Color bgColor) {
-    return Container(
-      width: 140,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(16),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            height: 120,
-            width: 140,
-            decoration: BoxDecoration(
-              color: bgColor,
-              borderRadius: BorderRadius.circular(16),
-              image: DecorationImage(
-                image: AssetImage(imagePath),
-                fit: BoxFit.cover,
-                onError: (exception, stackTrace) {
-                  // Handle image loading error
-                },
+  Widget _buildSessionTabs(Color primary, Color muted) {
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: Row(
+        children: List.generate(_sessionTabs.length, (index) {
+          final selected = _selectedSessionTab == index;
+          return Padding(
+            padding: const EdgeInsets.only(right: 10),
+            child: ChoiceChip(
+              label: Text(
+                _sessionTabs[index],
+                style: TextStyle(
+                  color: selected ? Colors.white : muted,
+                  fontWeight: FontWeight.w700,
+                ),
               ),
+              selected: selected,
+              onSelected: (_) => setState(() => _selectedSessionTab = index),
+              selectedColor: primary,
+              backgroundColor: Colors.white,
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
             ),
-          ),
-          const SizedBox(height: 8),
-          Text(
-            title,
-            style: const TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.w500,
-            ),
-            maxLines: 2,
-            overflow: TextOverflow.ellipsis,
-          ),
-        ],
+          );
+        }),
       ),
     );
   }
 
-  Widget _buildPreferenceItem(String title, IconData icon, VoidCallback onTap) {
+  Widget _buildSavedSessions(Color primary, Color muted) {
+    final sessions = [
+      {
+        'title': 'Morning Sun Salutation',
+        'level': 'Beginner • Vinyasa',
+        'time': '15:00',
+        'image': 'assets/images/light_of_yoga.jpg',
+      },
+      {
+        'title': 'Deep Relax Stretch',
+        'level': 'Intermediate • Yin',
+        'time': '22:00',
+        'image': 'assets/images/onboarding1.png',
+      },
+    ];
+
+    return SizedBox(
+      height: 230,
+      child: ListView.separated(
+        scrollDirection: Axis.horizontal,
+        itemCount: sessions.length,
+        separatorBuilder: (_, __) => const SizedBox(width: 14),
+        itemBuilder: (context, index) {
+          final item = sessions[index];
+          return Container(
+            width: 200,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(16),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.05),
+                  blurRadius: 12,
+                  offset: const Offset(0, 8),
+                ),
+              ],
+            ),
+            padding: const EdgeInsets.all(12),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(12),
+                  child: SizedBox(
+                    height: 120,
+                    width: double.infinity,
+                    child: Image.asset(
+                      item['image'] as String,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 10),
+                Row(
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFF1EBFF),
+                        borderRadius: BorderRadius.circular(30),
+                      ),
+                      child: Text(
+                        _sessionTabs[_selectedSessionTab],
+                        style: TextStyle(color: primary, fontSize: 12, fontWeight: FontWeight.w700),
+                      ),
+                    ),
+                    const Spacer(),
+                    Row(
+                      children: [
+                        Icon(Icons.access_time, size: 16, color: muted),
+                        const SizedBox(width: 4),
+                        Text(item['time'] as String, style: TextStyle(color: muted, fontWeight: FontWeight.w600)),
+                      ],
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  item['title'] as String,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w800),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  item['level'] as String,
+                  style: TextStyle(color: muted, fontSize: 12, fontWeight: FontWeight.w600),
+                ),
+              ],
+            ),
+          );
+        },
+      ),
+    );
+  }
+
+  Widget _buildSecurityCard({
+    required String title,
+    required IconData icon,
+    required Color primary,
+    required Color muted,
+    required VoidCallback onTap,
+  }) {
     return InkWell(
       onTap: onTap,
-      borderRadius: BorderRadius.circular(12),
+      borderRadius: BorderRadius.circular(14),
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
         decoration: BoxDecoration(
-          color: const Color(0xFFF8F9FA),
-          borderRadius: BorderRadius.circular(12),
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(14),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.05),
+              blurRadius: 12,
+              offset: const Offset(0, 8),
+            ),
+          ],
         ),
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(
-              title,
-              style: const TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w500,
+            CircleAvatar(
+              radius: 20,
+              backgroundColor: const Color(0xFFEFE7FF),
+              child: Icon(icon, color: primary),
+            ),
+            const SizedBox(width: 14),
+            Expanded(
+              child: Text(
+                title,
+                style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
               ),
             ),
-            Icon(
-              icon,
-              color: Colors.grey,
+            Icon(Icons.arrow_forward_ios_rounded, size: 18, color: muted),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildLogoutCard() {
+    return InkWell(
+      onTap: () => _showLogoutDialog(context),
+      borderRadius: BorderRadius.circular(16),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+        decoration: BoxDecoration(
+          color: const Color(0xFFFFF0F2),
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(color: const Color(0xFFFFCDD2)),
+        ),
+        child: Row(
+          children: const [
+            CircleAvatar(
+              radius: 20,
+              backgroundColor: Colors.white,
+              child: Icon(Icons.logout, color: Colors.red),
             ),
+            SizedBox(width: 14),
+            Expanded(
+              child: Text(
+                'Log Out',
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: Colors.red),
+              ),
+            ),
+            Icon(Icons.arrow_forward_ios_rounded, size: 18, color: Colors.red),
           ],
         ),
       ),

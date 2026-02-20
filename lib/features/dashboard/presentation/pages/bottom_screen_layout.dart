@@ -7,14 +7,16 @@ import 'package:tridivya_spritual_wellness_app/features/dashboard/presentation/p
 
 
 class BottomScreenLayout extends StatefulWidget {
-  const BottomScreenLayout({super.key});
+  const BottomScreenLayout({this.initialIndex = 0, super.key});
+
+  final int initialIndex;
 
   @override
   State<BottomScreenLayout> createState() => _BottomScreenLayoutState();
 }
 
 class _BottomScreenLayoutState extends State<BottomScreenLayout> {
-  int _selectedIndex = 0;
+  late int _selectedIndex = widget.initialIndex;
 
   List<Widget> lstBottomScreen = const [
     HomeScreen(),

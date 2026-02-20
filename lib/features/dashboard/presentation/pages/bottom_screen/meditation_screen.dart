@@ -5,7 +5,6 @@ class MeditationScreen extends StatelessWidget {
   const MeditationScreen({super.key});
 
   Color get _primary => const Color(0xFF7C4DFF);
-  Color get _secondary => const Color(0xFF8B5CF6);
   Color get _muted => const Color(0xFF6E6B7B);
   Color get _cardBg => const Color(0xFFF6F5FB);
 
