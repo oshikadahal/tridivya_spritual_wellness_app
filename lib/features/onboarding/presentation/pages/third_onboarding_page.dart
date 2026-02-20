@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:tridivya_spritual_wellness_app/core/services/storage/user_session_service.dart';
 import 'package:tridivya_spritual_wellness_app/features/auth/presentation/pages/login_page.dart';
 
-class ThirdOnboardingScreen extends StatelessWidget {
+class ThirdOnboardingScreen extends ConsumerWidget {
   const ThirdOnboardingScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       body: Container(
         width: double.infinity,
@@ -55,13 +57,16 @@ class ThirdOnboardingScreen extends StatelessWidget {
               const SizedBox(height: 40),
 
               ElevatedButton(
-                onPressed: () {
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const LoginPage(),
-                    ),
-                  );
+                onPressed: () async {
+                  await ref.read(userSessionServiceProvider).setOnboardingComplete();
+                  if (context.mounted) {
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const LoginPage(),
+                      ),
+                    );
+                  }
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.deepPurpleAccent,

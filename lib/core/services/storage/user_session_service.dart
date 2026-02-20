@@ -19,6 +19,7 @@ class UserSessionService {
   static const String _keyUserFullName = 'user_full_name';
   static const String _keyUserUsername = 'user_username';
   static const String _keyUserProfilePicture = 'user_profile_picture';
+  static const String _keyOnboardingComplete = 'onboarding_complete';
 
   UserSessionService({required SharedPreferences prefs}) : _prefs = prefs;
 
@@ -76,6 +77,14 @@ class UserSessionService {
       return;
     }
     await _prefs.setString(_keyUserProfilePicture, profilePicture);
+  }
+
+  bool hasCompletedOnboarding() {
+    return _prefs.getBool(_keyOnboardingComplete) ?? false;
+  }
+
+  Future<void> setOnboardingComplete() async {
+    await _prefs.setBool(_keyOnboardingComplete, true);
   }
 
   Future<void> updateFullName(String fullName) async {

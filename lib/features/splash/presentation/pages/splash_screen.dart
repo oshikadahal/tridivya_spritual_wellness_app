@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tridivya_spritual_wellness_app/app/routes/app_routes.dart';
+import 'package:tridivya_spritual_wellness_app/core/services/storage/user_session_service.dart';
+import 'package:tridivya_spritual_wellness_app/features/auth/presentation/pages/login_page.dart';
+import 'package:tridivya_spritual_wellness_app/features/dashboard/presentation/pages/bottom_screen_layout.dart';
 import 'package:tridivya_spritual_wellness_app/features/onboarding/presentation/pages/first_onboarding_screen.dart';
 
 class SplashScreen extends ConsumerStatefulWidget {
@@ -20,12 +23,21 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
   Future<void> _navigateToNext() async {
     await Future.delayed(const Duration(seconds: 2));
     if (!mounted) return;
+    final session = ref.read(userSessionServiceProvider);
+    if (session.isLoggedIn()) {
+      AppRoutes.pushReplacement(const BottomScreenLayout());
+      return;
+    }
 
-    AppRoutes.pushReplacement(
-      FirstOnboardingScreen(
-        onNext: () {},
-      ),
-    );
+    if (session.hasCompletedOnboarding()) {
+      AppRoutes.pushReplacement(const LoginPage());
+    } else {
+      AppRoutes.pushReplacement(
+        FirstOnboardingScreen(
+          onNext: () {},
+        ),
+      );
+    }
   }
 
   @override
