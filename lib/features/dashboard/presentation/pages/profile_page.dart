@@ -518,7 +518,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
     ];
 
     return SizedBox(
-      height: 230,
+      height: 280,
       child: ListView.separated(
         scrollDirection: Axis.horizontal,
         itemCount: sessions.length,
@@ -545,7 +545,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                 ClipRRect(
                   borderRadius: BorderRadius.circular(12),
                   child: SizedBox(
-                    height: 120,
+                    height: 150,
                     width: double.infinity,
                     child: Image.asset(
                       item['image'] as String,
